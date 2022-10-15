@@ -9,6 +9,7 @@ Vamos criar uma API para um consultório
 - Poderei adicionar novos usuários ao sistema do consultório
 - Poderei cancelar uma consulta na lista de consultas
 - Posso alterar informações do usuário
+- Posso pegar as consultas marcadas desse cliente
 
 ---
 
