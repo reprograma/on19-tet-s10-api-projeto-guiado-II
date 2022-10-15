@@ -135,11 +135,10 @@ Isso acontece normalmente quando você está apenas replicando algo que foi te e
 
 ### Links Úteis
 
-* [Lorem Ipsum](https://www.lipsum.com/feed/html)
+* [Pseudo Codigo](https://blog.betrybe.com/tecnologia/pseudocodigo/)
 
-* [Lorem Ipsum](https://www.lipsum.com/feed/html)
-* [Lorem Ipsum](https://www.lipsum.com/feed/html)
-* [Lorem Ipsum](https://www.lipsum.com/feed/html)
+* [O que é algoritmo](https://dicasdeprogramacao.com.br/o-que-e-algoritmo/)
+* [Pseudo Cõdigo para algoritmos](https://embarcados.com.br/pseudocodigo/)
 
 <p align="center">
 Desenvolvido com :purple_heart:  
