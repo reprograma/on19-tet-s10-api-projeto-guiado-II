@@ -1,10 +1,15 @@
-# Exercício de Sala 🏫  
+# Exercício de Sala 🏫
 
-## Nome do Exercicio
+## Consultorio Veterinário Reprograma
 
-- Explicação do exercício: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci.
-Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci. Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. 
+Vamos criar uma API para um consultório
+
+- Os usuários conseguiram marcar uma consulta
+- Os usuários poderão atualizar o dia de sua consulta
+- Poderei adicionar novos usuários ao sistema do consultório
+- Poderei cancelar uma consulta na lista de consultas
+- Posso alterar informações do usuário
+
 ---
 
 Terminou o exercício? Dá uma olhada nessa checklist e confere se tá tudo certinho, combinado?!
