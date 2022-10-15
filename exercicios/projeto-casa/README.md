@@ -1,10 +1,19 @@
-# Projetinho 📓  
+# Projetinho 📓
 
-## Nome do Projeto
+## BankReprograma
 
-- Explicação do projeto: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci.
-Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci. Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. 
+### Agora chegou a hora da verdade
+
+Use todo o conhecimento aprendido até o momento e crie uma API de um banco.
+
+Essa API deve ser capaz de:
+
+- Criar os clientes do banco
+- Atualizar informações desses clientes ( como endereço, telefone de contato...)
+- Fazer depósitos / pagamentos usando o saldo de sua conta
+- Encerrar contas de clientes
+- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
+
 ---
 
 Terminou o projetinho? Dá uma olhada nessa checklist e confere se tá tudo certinho, combinado?!
