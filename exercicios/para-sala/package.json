@@ -1,0 +1,17 @@
+{
+  "name": "exercicio-para-sala",
+  "version": "1.0.0",
+  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Manuelly Suzik",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
