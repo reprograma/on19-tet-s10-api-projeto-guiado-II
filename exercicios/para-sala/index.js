@@ -69,8 +69,40 @@ app.patch('/clientes/:id/consulta', (req, res) => {
     .status(404)
     .json({ messagem: `Cliente com ID : ${IDCliente} não existe` });
 });
+<<<<<<< HEAD
 // - Os usuários poderão atualizar o dia de sua consulta - ( tendo mais consultas também temos que ter o ID da consulta que gostaria alterar a data)
 app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {});
+=======
+// - Os usuários poderão atualizar o dia de sua consulta - ( tendo mais consultas também temos que ter o ID da consulta que gostaria alterar a data) - DONE
+app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {
+  const idCliente = req.params.idCliente;
+  const idConsulta = req.params.idConsulta;
+  const { data: novaData } = req.body;
+
+  const clienteExiste = listaClientes.find(
+    (cliente) => cliente.id == idCliente
+  );
+
+  if (clienteExiste) {
+    const novasConsultas = clienteExiste.procedimentos.map((procedimento) => {
+      if (procedimento.id == idConsulta) {
+        procedimento.data = novaData;
+      }
+      return { ...procedimento };
+    });
+    listaClientes.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        listaClientes[index].procedimentos = novasConsultas;
+      }
+    });
+    return res.status(200).json({
+      message: `Consulta do cliente ${clienteExiste.nome_cliente} foi atualizada com sucesso!`,
+    });
+  }
+
+  return res.status(404).json({ messagem: 'Cliente não foi encontrado' });
+});
+>>>>>>> 756a34377e93a1993cb21075d9e057cf11681efe
 // - Poderei adicionar novos usuários ao sistema do consultório - DONE
 app.post('/clientes/add', (req, res) => {
   const { nome_cliente, pet } = req.body;
@@ -87,8 +119,53 @@ app.post('/clientes/add', (req, res) => {
   return res.json(novoClienteComID);
 });
 // - Poderei cancelar uma consulta na lista de consultas - ( mandar o ID da consulta daquele cliente que quer cancelar) || Se quiser manter o histórico das consultas adicionar uma flag: status à consulta. Ex: cancelada , pendente, finalizada...
+<<<<<<< HEAD
 // - Posso alterar informações do usuário - ( preciso do ID do usuário para saber qual usuário vai ser atualizado)
 // - Posso pegar as consultas marcadas desse cliente -  (listar todas as consultas desse cliente rota GET cliente/{ID}/consultas) // FILTRO POR MAIS RECENTES CABE ADICIONAR AQUI a lib momento.js é boa para manipular dados.
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
+=======
+// - Posso alterar informações do usuário - ( preciso do ID do usuário para saber qual usuário vai ser atualizado) - DONE
+app.patch('/clientes/:id', (req, res) => {
+  const idCliente = req.params.id;
+  const { nome_cliente } = req.body;
+
+  const existeCliente = listaClientes.find(
+    (cliente) => cliente.id == idCliente
+  );
+
+  if (existeCliente) {
+    const usuarioAtualizado = {
+      ...existeCliente,
+      nome_cliente: nome_cliente,
+    };
+
+    listaClientes.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        listaClientes[index] = usuarioAtualizado;
+      }
+    });
+    return res.status(200).json({
+      message: `O usuário ${existeCliente.nome_cliente} foi atualizado com sucesso`,
+    });
+  }
+  return res.status(404).json({ messagem: 'Usuário não existe' });
+});
+// - Posso pegar as consultas marcadas desse cliente - DONE
+app.get('/clientes/:id/consultas', (req, res) => {
+  const idCliente = req.params.id;
+
+  const clienteExiste = listaClientes.find(
+    (cliente) => cliente.id == idCliente
+  );
+  if (clienteExiste) {
+    return res.status(200).json(clienteExiste.procedimentos);
+  }
+  return res.status(404).json({ messagem: 'Cliente não existe' });
+});
+
+app.listen(port, () => {
+  console.log(`API está rodando na porta ${port}`);
+});
+>>>>>>> 756a34377e93a1993cb21075d9e057cf11681efe

@@ -1,12 +1,22 @@
 {
+<<<<<<< HEAD
   "name": "para-sala",
   "version": "1.0.0",
   "description": "Vamos criar uma API para um consultório",
+=======
+  "name": "exercicio-para-sala",
+  "version": "1.0.0",
+  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+>>>>>>> 756a34377e93a1993cb21075d9e057cf11681efe
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
   },
+<<<<<<< HEAD
   "author": "Roberta Souza",
+=======
+  "author": "Manuelly Suzik",
+>>>>>>> 756a34377e93a1993cb21075d9e057cf11681efe
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
