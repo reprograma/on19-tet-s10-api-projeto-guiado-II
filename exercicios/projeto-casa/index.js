@@ -4,14 +4,27 @@ const port = 3333
 const listaClientesBancarios = require('./model/contas-clientes.json')
 const { v4: uuidv4 } = require('uuid')
 
-app.use(express.json)
+app.use(express.json())
 //console.log(uuidv4())
+
+// Listar clientes do banco
+app.get('/clientes', (req, res) => {
+  res.send(listaClientesBancarios)
+})
+
+//Mostrar detalhes do cliente
+app.get('/clientes/:id', (req, res) => {
+  const id = req.params.id
+
+  const detalhesCliente = listaClientesBancarios.filter(
+    (item, index) => item.id == id
+  )
+  res.json(detalhesCliente)
+})
 
 // Criar os clientes do banco
 app.post('/clientes/novo', (req, res) => {
   const { nome_cliente, cpf_cliente, data_nascimento, conta } = req.body
-  //const idCliente = uuidv4()
-
   const cadastraCliente = {
     id: uuidv4(),
     nome_cliente,
