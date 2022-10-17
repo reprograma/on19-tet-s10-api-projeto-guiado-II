@@ -1,0 +1,17 @@
+{
+  "name": "projeto-casa",
+  "version": "1.0.0",
+  "description": "- Explicação do projeto: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci.\r Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\r Aliquam leo nibh, tempus sed rhoncus et, ultrices vitae orci. Donec erat mauris, laoreet in tortor vel, eleifend suscipit nibh. \r ---",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Djeisly",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
