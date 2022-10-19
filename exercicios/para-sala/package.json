@@ -1,0 +1,16 @@
+{
+  "name": "para-sala",
+  "version": "1.0.0",
+  "description": "Vamos criar uma API para um consultório",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Allana larissa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "uuid": "^9.0.0"
+  }
+}
