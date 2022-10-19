@@ -5,7 +5,6 @@ const listaClientesBancarios = require('./model/contas-clientes.json')
 const { v4: uuidv4 } = require('uuid')
 
 app.use(express.json())
-//console.log(uuidv4())
 
 // Listar clientes do banco
 app.get('/clientes', (req, res) => {
@@ -35,27 +34,57 @@ app.post('/clientes/novo', (req, res) => {
   listaClientesBancarios.push(cadastraCliente)
   return res.status(201).json(cadastraCliente)
 })
+
 // Atualizar informações desses clientes ( como endereço, telefone de contato...)
+app.patch('/clientes/:id', (req, res) => {
+  const idCliente = req.params.id
+  const enderecoAtualizado = req.body
+  const telefoneAtualizado = req.body
+
+  const existeCliente = listaClientesBancarios.find(
+    cliente => cliente.id == idCliente
+  )
+
+  if (existeCliente) {
+    const clienteAtualizado = {
+      ...existeCliente,
+      ...enderecoAtualizado,
+      ...telefoneAtualizado
+    }
+
+    listaClientesBancarios.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        listaClientesBancarios[index] = clienteAtualizado
+      }
+    })
+    return res.status(200).json({ cliente: clienteAtualizado })
+  }
+  return res.status(404).json({ message: 'Cliente não existe!!' })
+})
+
 // Fazer depósitos / pagamentos usando o saldo de sua conta
+app.patch('clientes/:id', (req, res) => {})
 
 // Encerrar contas de clientes
 app.delete('/clientes/:id', (req, res) => {
   const idCliente = req.params.id
-  const deletarCliente = listaClientesBancarios.find(
+  const existeCliente = listaClientesBancarios.find(
     cliente => cliente.id == idCliente
   )
 
-  if (deletarCliente) {
+  if (existeCliente) {
     listaClientesBancarios.map((cliente, index) => {
       if (cliente.id == idCliente) {
         listaClientesBancarios.splice(index, 1)
       }
     })
-    return res.status(200).json(listaClientesBancarios)
+    return res
+      .status(200)
+      .json({ message: 'Cliente removido!!', cliente: existeCliente })
   }
   return res.status(404).json({ message: 'Cliente não encontrado!!' })
 })
-// Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
+// Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... [EM PROGRESS]
 
 app.listen(port, () => {
   console.log('API is ON, baby!!')
