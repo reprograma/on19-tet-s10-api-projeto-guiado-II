@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3333;
-const listaClientes = require('./model/consultas-clientes.json');
+const listaClientes = require("./model/consultas-clientes.json");
 
 app.use(express.json());
 
@@ -40,7 +40,7 @@ const recebeUltimoIDConsultas = (cliente) => {
   return consultaMaiorID?.id + 1 || 0;
 };
 // - Os usuários conseguiram marcar uma consulta - DONE
-app.patch('/clientes/:id/consulta', (req, res) => {
+app.patch("/clientes/:id/consulta", (req, res) => {
   const { nome, data } = req.body;
   const IDCliente = req.params.id;
 
@@ -70,7 +70,7 @@ app.patch('/clientes/:id/consulta', (req, res) => {
     .json({ messagem: `Cliente com ID : ${IDCliente} não existe` });
 });
 // - Os usuários poderão atualizar o dia de sua consulta - ( tendo mais consultas também temos que ter o ID da consulta que gostaria alterar a data) - DONE
-app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {
+app.patch("/clientes/:idCliente/consulta/:idConsulta", (req, res) => {
   const idCliente = req.params.idCliente;
   const idConsulta = req.params.idConsulta;
   const { data: novaData } = req.body;
@@ -96,10 +96,10 @@ app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {
     });
   }
 
-  return res.status(404).json({ messagem: 'Cliente não foi encontrado' });
+  return res.status(404).json({ messagem: "Cliente não foi encontrado" });
 });
 // - Poderei adicionar novos usuários ao sistema do consultório - DONE
-app.post('/clientes/add', (req, res) => {
+app.post("/clientes/add", (req, res) => {
   const { nome_cliente, pet } = req.body;
 
   const IDNovo = recebeUltimoID();
@@ -115,7 +115,7 @@ app.post('/clientes/add', (req, res) => {
 });
 // - Poderei cancelar uma consulta na lista de consultas - ( mandar o ID da consulta daquele cliente que quer cancelar) || Se quiser manter o histórico das consultas adicionar uma flag: status à consulta. Ex: cancelada , pendente, finalizada...
 // - Posso alterar informações do usuário - ( preciso do ID do usuário para saber qual usuário vai ser atualizado) - DONE
-app.patch('/clientes/:id', (req, res) => {
+app.patch("/clientes/:id", (req, res) => {
   const idCliente = req.params.id;
   const { nome_cliente } = req.body;
 
@@ -138,10 +138,10 @@ app.patch('/clientes/:id', (req, res) => {
       message: `O usuário ${existeCliente.nome_cliente} foi atualizado com sucesso`,
     });
   }
-  return res.status(404).json({ messagem: 'Usuário não existe' });
+  return res.status(404).json({ messagem: "Usuário não existe" });
 });
 // - Posso pegar as consultas marcadas desse cliente - DONE
-app.get('/clientes/:id/consultas', (req, res) => {
+app.get("/clientes/:id/consultas", (req, res) => {
   const idCliente = req.params.id;
 
   const clienteExiste = listaClientes.find(
@@ -150,7 +150,7 @@ app.get('/clientes/:id/consultas', (req, res) => {
   if (clienteExiste) {
     return res.status(200).json(clienteExiste.procedimentos);
   }
-  return res.status(404).json({ messagem: 'Cliente não existe' });
+  return res.status(404).json({ messagem: "Cliente não existe" });
 });
 
 app.listen(port, () => {
