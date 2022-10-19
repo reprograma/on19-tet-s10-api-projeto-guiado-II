@@ -93,8 +93,6 @@ app.listen(port, () => {
 //GET - Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... - FILTRO
 
 
-//https://github.com/xeniabarreto/On14-TodasEmTech-s11-PG-II/blob/xenia-barreto/estabelecimentos/src/controllers/estabelecimentoController.js
-
 
 /*
 - Criar os clientes do banco - Post - ok
