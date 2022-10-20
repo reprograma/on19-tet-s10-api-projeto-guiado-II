@@ -6,7 +6,11 @@
     "data_nascimento": "7/9/1957",
     "conta": {
       "numero": 7866133,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 98671.26,
       "data_criacao": "2022-09-23T03:33:18.161Z"
     }
@@ -18,7 +22,11 @@
     "data_nascimento": "10/13/1974",
     "conta": {
       "numero": 699634,
-      "tipo": "corrente",
+      "tipo": {
+        "tipo_conta": "corrente",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 70877.74,
       "data_criacao": "2022-04-04T03:22:17.891Z"
     }
@@ -30,7 +38,11 @@
     "data_nascimento": "8/14/1990",
     "conta": {
       "numero": 3138799,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 17265.04,
       "data_criacao": "2022-07-15T17:47:06.148Z"
     }
@@ -42,7 +54,11 @@
     "data_nascimento": "10/31/1973",
     "conta": {
       "numero": 1371027,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 63162.63,
       "data_criacao": "2022-10-20T05:55:46.100Z"
     }
@@ -54,7 +70,11 @@
     "data_nascimento": "12/30/1967",
     "conta": {
       "numero": 8294509,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 95929.37,
       "data_criacao": "2022-07-21T20:11:54.943Z"
     }
@@ -66,7 +86,11 @@
     "data_nascimento": "4/11/1993",
     "conta": {
       "numero": 8800198,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 33343.98,
       "data_criacao": "2022-02-02T19:13:22.678Z"
     }
@@ -78,7 +102,11 @@
     "data_nascimento": "7/17/1992",
     "conta": {
       "numero": 4123540,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 47291.98,
       "data_criacao": "2022-08-28T07:06:56.752Z"
     }
@@ -90,7 +118,11 @@
     "data_nascimento": "1/27/1995",
     "conta": {
       "numero": 6113146,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 37553.63,
       "data_criacao": "2022-09-10T07:38:30.104Z"
     }
@@ -102,7 +134,11 @@
     "data_nascimento": "9/15/1975",
     "conta": {
       "numero": 245037,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 93625.23,
       "data_criacao": "2022-05-03T08:24:21.957Z"
     }
@@ -114,7 +150,11 @@
     "data_nascimento": "5/18/1986",
     "conta": {
       "numero": 8517303,
-      "tipo": "corrente",
+      "tipo": {
+        "tipo_conta": "corrente",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 47845.54,
       "data_criacao": "2022-03-03T20:22:50.909Z"
     }
@@ -126,7 +166,11 @@
     "data_nascimento": "3/15/1976",
     "conta": {
       "numero": 4666965,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 28510.1,
       "data_criacao": "2022-01-15T05:24:42.927Z"
     }
@@ -138,7 +182,11 @@
     "data_nascimento": "10/6/1975",
     "conta": {
       "numero": 8363148,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 82254.22,
       "data_criacao": "2022-01-26T10:29:56.009Z"
     }
@@ -150,7 +198,11 @@
     "data_nascimento": "12/28/1968",
     "conta": {
       "numero": 7808654,
-      "tipo": "corrente",
+      "tipo": {
+        "tipo_conta": "corrente",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 62170.62,
       "data_criacao": "2022-11-09T10:08:34.634Z"
     }
@@ -162,7 +214,11 @@
     "data_nascimento": "12/16/1960",
     "conta": {
       "numero": 2673211,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 79188.13,
       "data_criacao": "2022-05-21T14:23:47.613Z"
     }
@@ -174,7 +230,11 @@
     "data_nascimento": "7/22/1974",
     "conta": {
       "numero": 1068108,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 48544.24,
       "data_criacao": "2022-03-09T12:33:30.076Z"
     }
@@ -186,7 +246,11 @@
     "data_nascimento": "4/20/1986",
     "conta": {
       "numero": 380094,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 73356.38,
       "data_criacao": "2022-08-07T14:06:35.826Z"
     }
@@ -198,7 +262,11 @@
     "data_nascimento": "9/12/1963",
     "conta": {
       "numero": 1137053,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 42000.39,
       "data_criacao": "2022-05-28T02:52:13.709Z"
     }
@@ -210,7 +278,11 @@
     "data_nascimento": "10/25/1960",
     "conta": {
       "numero": 7775444,
-      "tipo": "poupança",
+      "tipo": {
+        "tipo_conta": "poupança",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 16601.97,
       "data_criacao": "2022-02-13T05:05:33.398Z"
     }
@@ -222,7 +294,11 @@
     "data_nascimento": "8/24/2000",
     "conta": {
       "numero": 9793754,
-      "tipo": "corrente",
+      "tipo": {
+        "tipo_conta": "corrente",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
       "saldo": 48705.45,
       "data_criacao": "2022-01-12T10:14:42.530Z"
     }
@@ -234,7 +310,12 @@
     "data_nascimento": "12/2/1987",
     "conta": {
       "numero": 1207041,
-      "tipo": "investimento",
+      "tipo": {
+        "tipo_conta": "investimento",
+        "transacao_entrada": "",
+        "transacao_saida": ""
+      },
+
       "saldo": 79220.23,
       "data_criacao": "2022-07-28T20:59:27.284Z"
     }
