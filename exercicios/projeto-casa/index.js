@@ -47,35 +47,65 @@ app.patch('/cliente/:Id/consulta/:telefone', (req, res ) => {
     return res.status(404).json({mensagem: 'cliente não encontrado'})
      })
   //nova rota para alterar endereço
-app.patch('/cliente/:Id/consulta/:endereco', (req, res)=>{
-    const IDCliente = req.params.IDUnico
-    const idendereco = req.params.endereco
-    const { endereco: newendereco} = req.body
-    const ClienteComIdValido = listaClientesbanco.find((conta) => conta.IDUnico == IDCliente)
+app.put('/endereco', (req, res)=>{ // tentativa de fazer para achar endereço mas não rolou sorry prof, não sei onde errei tentei usar a mesma lógica do telefone
+    const cpfCliente = req.query.cpf_cliente
+    const atualizarend = req.params.edendereco
+    const { endereco} = req.body
+    const ClienteComIdValido = listaClientesbanco.find((conta) => conta.cpf_cliente ==cpfCliente)
     if (ClienteComIdValido){
         const novoendereco = listaClientesbanco.map((conta, index) =>{
-            if (conta.endereco = Idendereco)
+            if (conta.endereco = atualizarend)
             return conta.endereco == newendereco;
           
         })
         listaClientesbanco.map((conta, index) =>{
-            if (conta.IDUnico != IDCliente){
+            if (conta.cpf_cliente != cpfCliente){
                 listaClientesbanco[index].endereco = novoendereco
             }
             return res.status(200).json({mensagem: 
-                `O enderenco do cliente é: ${ClienteComIdValido.nome_cliente} Foi atualizado para   ${ClienteComIdValido.endereco} `})
+                `O enderenco do cliente é: ${ClienteComIdValido.nome_cliente} Foi atualizado para   ${ClienteComIdValido.atualizarend} `})
         })
     }
     return res.status(404).json({mensagem: 'cliente não encontrado'});
 })
 +
-//- Fazer depósitos / pagamentos usando o saldo de sua conta
-app.patch('clientes-deposito/:id', (req, res ) => {
-    const clienteid = req.params.id
-    const SaldoAtualizado = req.body
-    const existeclientevalido = listaClientesbanco.find(cliente => cliente.id === clienteid)
-    const existesaldo = listaClientesbanco.find()
+//- Fazer depósitos / pagamentos usando o saldo de sua conta (FEITO, Funcinou tentei fazer com req.params mas não rolou, não se poderia fazer com req.query para)
+app.patch('/deposito', (req, res ) => { 
+    const SolicitaCpfcliente = req.query.cpf_cliente // usei o query para consultar no banco se o cpf era válido
+    const {valorDeposito} = req.body
+    const ExisteCliente = listaClientesbanco.find((cliente) => cliente.cpf_cliente == SolicitaCpfcliente)
+    if (ExisteCliente){
+       const NovoSaldoConta ={ 
+        ...ExisteCliente.conta,
+        saldo: ExisteCliente.conta.saldo + valorDeposito,
+    } 
+    listaClientesbanco.map((cliente, index)=>{
+      if (cliente.cpf_cliente == SolicitaCpfcliente){
+        return (listaClientesbanco[index] = NovoSaldoConta)
+      }
+    })
+    res.status(202).json(NovoSaldoConta)
+} 
 
+    return res.status(404).json({ messagem: 'Usuário não existe' }); 
+})
+// rota para saque(pagamento)(FEITO)
+app.patch('/saque', (req, res) =>{
+    const VerificaCpf = req.query.cpf_cliente
+    const {Valordosaque} = req.body
+    const Existecliente = listaClientesbanco.find((cliente) => cliente.cpf_cliente == VerificaCpf)
+    if (Existecliente.conta.saldo >= Valordosaque){
+        const Saque = {
+            ...Existecliente.conta,
+            Saldo: Existecliente.conta.saldo - Valordosaque,
+        }
+        listaClientesbanco.map((cliente, index) =>{
+            if (cliente.cpf_cliente == VerificaCpf)
+            return (listaClientesbanco[index] = Valordosaque)
+        } )
+        res.status(202).json(Saque)
+    }
+return res.status(404).json({mensagem: "Seu saldo é insuficiente para o saque!"})
 })
 //- Encerrar contas de clientes (encerei a conta por cpf )(feito)
 app.delete('/clientes/:cpf_cliente', (req, res) =>{
@@ -90,7 +120,7 @@ app.delete('/clientes/:cpf_cliente', (req, res) =>{
 }
 return res.status(404).json({mensagem: 'Este cpf não é válido, tente novamente '})
 })
-//- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...(DONE) // tentei filtrar por saldo mas n conseguir
+//- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...(DONE) alguns tipos de filtros
 app.get('/clientes', (req, res) =>{ 
     const filtroNome = req.query.nome_cliente
     const filtroCpf= req.query.cpf_cliente
@@ -111,20 +141,6 @@ app.get('/clientes', (req, res) =>{
     })
     res.json(filtrando)
 }  )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(port, () =>{
     console.log(` A API está rodando na porta ${port}`)
