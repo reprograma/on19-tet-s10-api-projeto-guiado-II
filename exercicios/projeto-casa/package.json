@@ -1,0 +1,17 @@
+{
+  "name": "projeto-guiado-api2",
+  "version": "1.0.0",
+  "description": "Use todo o conhecimento aprendido até o momento e crie uma API de um banco.",
+  "main": "index.js",
+  "scripts": {
+    "go" : "nodemon index.js"
+  },
+  "author": "judy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
