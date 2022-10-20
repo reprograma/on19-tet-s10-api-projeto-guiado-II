@@ -1,0 +1,19 @@
+{
+  "name": "projeto-casa",
+  "version": "1.0.0",
+  "description": "Use todo o conhecimento aprendido até o momento e crie uma API de um banco.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Shirlene Teles",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
