@@ -1,0 +1,17 @@
+{
+  "name": "projeto-casa",
+  "version": "1.0.0",
+  "description": "Api consultorio veterinario ",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Rafa Beckss",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
