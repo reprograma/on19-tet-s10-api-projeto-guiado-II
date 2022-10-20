@@ -29,7 +29,9 @@ app.post("/conta/add", (req, res) => {
         numero: novaConta,
         tipo,
         saldo: 0,
-        data_criacao: new Date(),
+        data_criacao: new Date().toISOString()
+        //.toString()
+        //.toLocaleString('br', { timeZone: 'America/Sao_Paulo' }),
       },
     };
     contasClientes.push(novoCliente);
