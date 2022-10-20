@@ -1,6 +1,22 @@
 const express = require('express');
 const app = express();
 const port = 3333;
+<<<<<<< HEAD
+
+app.use(express.json());
+
+app.listen(port, () => {
+    console.log(`API está rodando na porta ${port}`);
+})
+
+//marcar consulta
+
+
+//adicionar novo usuários
+app.post("/ clientes/add", (req) => {
+    const novoCliente = req.body;
+})
+=======
 const listaClientes = require('./model/consultas-clientes.json');
 
 app.use(express.json());
@@ -156,3 +172,4 @@ app.get('/clientes/:id/consultas', (req, res) => {
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
+>>>>>>> acf0a4d2c9e7a5a4d8154bc27c81c772a7e7ea5a
