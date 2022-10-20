@@ -69,40 +69,8 @@ app.patch('/clientes/:id/consulta', (req, res) => {
     .status(404)
     .json({ messagem: `Cliente com ID : ${IDCliente} não existe` });
 });
-<<<<<<< HEAD
 // - Os usuários poderão atualizar o dia de sua consulta - ( tendo mais consultas também temos que ter o ID da consulta que gostaria alterar a data)
 app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {});
-=======
-// - Os usuários poderão atualizar o dia de sua consulta - ( tendo mais consultas também temos que ter o ID da consulta que gostaria alterar a data) - DONE
-app.patch('/clientes/:idCliente/consulta/:idConsulta', (req, res) => {
-  const idCliente = req.params.idCliente;
-  const idConsulta = req.params.idConsulta;
-  const { data: novaData } = req.body;
-
-  const clienteExiste = listaClientes.find(
-    (cliente) => cliente.id == idCliente
-  );
-
-  if (clienteExiste) {
-    const novasConsultas = clienteExiste.procedimentos.map((procedimento) => {
-      if (procedimento.id == idConsulta) {
-        procedimento.data = novaData;
-      }
-      return { ...procedimento };
-    });
-    listaClientes.map((cliente, index) => {
-      if (cliente.id == idCliente) {
-        listaClientes[index].procedimentos = novasConsultas;
-      }
-    });
-    return res.status(200).json({
-      message: `Consulta do cliente ${clienteExiste.nome_cliente} foi atualizada com sucesso!`,
-    });
-  }
-
-  return res.status(404).json({ messagem: 'Cliente não foi encontrado' });
-});
->>>>>>> 756a34377e93a1993cb21075d9e057cf11681efe
 // - Poderei adicionar novos usuários ao sistema do consultório - DONE
 app.post('/clientes/add', (req, res) => {
   const { nome_cliente, pet } = req.body;

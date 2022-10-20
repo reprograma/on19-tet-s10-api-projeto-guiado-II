@@ -4,6 +4,7 @@
     "nome_cliente": "Hester Collins",
     "cpf_cliente": "289.441.317-32",
     "data_nascimento": "7/9/1957",
+    "contato":{},
     "conta": {
       "numero": 7866133,
       "tipo": "investimento",
@@ -16,6 +17,7 @@
     "nome_cliente": "Austin Stephens",
     "cpf_cliente": "376.995.376-29",
     "data_nascimento": "10/13/1974",
+    "contato":{},
     "conta": {
       "numero": 699634,
       "tipo": "corrente",
@@ -28,6 +30,7 @@
     "nome_cliente": "Charlotte Blake",
     "cpf_cliente": "792.535.185-37",
     "data_nascimento": "8/14/1990",
+    "contato":{},
     "conta": {
       "numero": 3138799,
       "tipo": "investimento",
@@ -40,6 +43,7 @@
     "nome_cliente": "Daniel Wood",
     "cpf_cliente": "111.528.403-71",
     "data_nascimento": "10/31/1973",
+    "contato":{},
     "conta": {
       "numero": 1371027,
       "tipo": "poupança",
@@ -52,6 +56,7 @@
     "nome_cliente": "Aaron Marshall",
     "cpf_cliente": "226.558.182-88",
     "data_nascimento": "12/30/1967",
+    "contato":{},
     "conta": {
       "numero": 8294509,
       "tipo": "investimento",
@@ -64,6 +69,7 @@
     "nome_cliente": "Christine Franklin",
     "cpf_cliente": "847.672.689-90",
     "data_nascimento": "4/11/1993",
+    "contato":{},
     "conta": {
       "numero": 8800198,
       "tipo": "investimento",
@@ -76,6 +82,7 @@
     "nome_cliente": "Caroline Norton",
     "cpf_cliente": "334.015.278-00",
     "data_nascimento": "7/17/1992",
+    "contato":{},
     "conta": {
       "numero": 4123540,
       "tipo": "poupança",
@@ -88,6 +95,7 @@
     "nome_cliente": "Mae Cruz",
     "cpf_cliente": "131.355.470-78",
     "data_nascimento": "1/27/1995",
+    "contato":{},
     "conta": {
       "numero": 6113146,
       "tipo": "investimento",
@@ -100,6 +108,7 @@
     "nome_cliente": "Beatrice Sullivan",
     "cpf_cliente": "514.196.671-22",
     "data_nascimento": "9/15/1975",
+    "contato":{},
     "conta": {
       "numero": 245037,
       "tipo": "poupança",
@@ -112,6 +121,7 @@
     "nome_cliente": "Nina Pierce",
     "cpf_cliente": "601.842.055-49",
     "data_nascimento": "5/18/1986",
+    "contato":{},
     "conta": {
       "numero": 8517303,
       "tipo": "corrente",
@@ -124,6 +134,7 @@
     "nome_cliente": "Nicholas Soto",
     "cpf_cliente": "496.386.521-10",
     "data_nascimento": "3/15/1976",
+    "contato":{},
     "conta": {
       "numero": 4666965,
       "tipo": "investimento",
@@ -136,6 +147,7 @@
     "nome_cliente": "Josephine Ward",
     "cpf_cliente": "762.803.686-45",
     "data_nascimento": "10/6/1975",
+    "contato":{},
     "conta": {
       "numero": 8363148,
       "tipo": "investimento",
@@ -148,6 +160,7 @@
     "nome_cliente": "Jesse Wallace",
     "cpf_cliente": "017.233.038-60",
     "data_nascimento": "12/28/1968",
+    "contato":{},
     "conta": {
       "numero": 7808654,
       "tipo": "corrente",
@@ -160,6 +173,7 @@
     "nome_cliente": "Barry Robinson",
     "cpf_cliente": "408.289.866-22",
     "data_nascimento": "12/16/1960",
+    "contato":{},
     "conta": {
       "numero": 2673211,
       "tipo": "poupança",
@@ -172,6 +186,7 @@
     "nome_cliente": "Ethel Mann",
     "cpf_cliente": "709.475.861-80",
     "data_nascimento": "7/22/1974",
+    "contato":{},
     "conta": {
       "numero": 1068108,
       "tipo": "poupança",
@@ -184,6 +199,7 @@
     "nome_cliente": "Leroy Phelps",
     "cpf_cliente": "929.885.873-61",
     "data_nascimento": "4/20/1986",
+    "contato":{},
     "conta": {
       "numero": 380094,
       "tipo": "poupança",
@@ -196,6 +212,7 @@
     "nome_cliente": "Alan King",
     "cpf_cliente": "443.151.547-09",
     "data_nascimento": "9/12/1963",
+    "contato":{},
     "conta": {
       "numero": 1137053,
       "tipo": "investimento",
@@ -208,6 +225,7 @@
     "nome_cliente": "Loretta Tran",
     "cpf_cliente": "229.616.345-98",
     "data_nascimento": "10/25/1960",
+    "contato":{},
     "conta": {
       "numero": 7775444,
       "tipo": "poupança",
@@ -220,6 +238,7 @@
     "nome_cliente": "Milton Wells",
     "cpf_cliente": "476.781.729-31",
     "data_nascimento": "8/24/2000",
+    "contato":{},
     "conta": {
       "numero": 9793754,
       "tipo": "corrente",
@@ -232,6 +251,7 @@
     "nome_cliente": "Lula Stone",
     "cpf_cliente": "853.730.384-40",
     "data_nascimento": "12/2/1987",
+    "contato":{},
     "conta": {
       "numero": 1207041,
       "tipo": "investimento",
