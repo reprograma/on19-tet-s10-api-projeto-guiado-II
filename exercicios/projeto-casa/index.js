@@ -41,8 +41,26 @@ app.post('/clientes/add', (req, res) => {
   })
 })
 
-//- Atualizar informações desses clientes ( como endereço, telefone de contato...) -- IN PROGRESS
+//- Atualizar informações desses clientes ( como endereço, telefone de contato...) -- DONE
+ app.patch('/clientes/:id.', (req, res)=>{
+  const idDoCliente = req.params.id
+  const camposAtualizados = req.body
 
+  const clienteExistente = listaClientesBanco.find((usuario => usuario.id == idDoCliente))
+
+  if (clienteExistente){
+    const clienteAtualizado = {
+      ...clienteExistente,
+      ...camposAtualizados
+    }
+    return res.status(200).json(clienteAtualizado)
+  }
+  return res.status(404).json(
+    {
+    messagem: "Cliente não encontrado"
+    }
+  )
+ })
 
 
 //- Fazer depósitos / pagamentos usando o saldo de sua conta
