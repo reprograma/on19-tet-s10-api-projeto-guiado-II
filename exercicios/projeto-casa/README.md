@@ -8,7 +8,7 @@ Use todo o conhecimento aprendido até o momento e crie uma API de um banco.
 
 Essa API deve ser capaz de:
 
-- Criar os clientes do banco
+- Criar os clientes do banco 
 - Atualizar informações desses clientes ( como endereço, telefone de contato...)
 - Fazer depósitos / pagamentos usando o saldo de sua conta
 - Encerrar contas de clientes
