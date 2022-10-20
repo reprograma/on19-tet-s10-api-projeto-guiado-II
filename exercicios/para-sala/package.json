@@ -1,7 +1,7 @@
 {
   "name": "exercicio-para-sala",
   "version": "1.0.0",
-  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+  "description": "\"API de consultório veterinário da \"",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
