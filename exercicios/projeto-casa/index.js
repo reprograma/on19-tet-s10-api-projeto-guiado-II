@@ -23,20 +23,40 @@ app.get('/clientes/:id', (req, res) => {
 
 // Criar os clientes do banco
 app.post('/clientes/novo', (req, res) => {
-  const { nome_cliente, cpf_cliente, data_nascimento, conta } = req.body
-  const cadastraCliente = {
+  const {
+    nome_cliente,
+    cpf_cliente,
+    data_nascimento,
+    conta: { tipo, saldo }
+  } = req.body
+  const numeroConta = Math.floor(Math.random() * 5000000)
+  const existeCPF = listaClientesBancarios.find(
+    cliente => cliente.cpf_cliente == cpf_cliente
+  )
+
+  if (existeCPF) {
+    return res
+      .status(404)
+      .json({ message: 'Existe uma conta cadastrada com esse CPF' })
+  }
+  const novoCliente = {
     id: uuidv4(),
     nome_cliente,
     cpf_cliente,
     data_nascimento,
-    conta
+    conta: {
+      numero: numeroConta,
+      tipo,
+      saldo,
+      data_criacao: new Date()
+    }
   }
-  listaClientesBancarios.push(cadastraCliente)
-  return res.status(201).json(cadastraCliente)
+  listaClientesBancarios.push(novoCliente)
+  return res.status(201).json(novoCliente)
 })
 
 // Atualizar informações desses clientes ( como endereço, telefone de contato...)
-app.patch('/clientes/:id', (req, res) => {
+app.patch('/clientes/:id/atualiza', (req, res) => {
   const idCliente = req.params.id
   const enderecoAtualizado = req.body
   const telefoneAtualizado = req.body
@@ -62,11 +82,64 @@ app.patch('/clientes/:id', (req, res) => {
   return res.status(404).json({ message: 'Cliente não existe!!' })
 })
 
-// Fazer depósitos / pagamentos usando o saldo de sua conta
-app.patch('clientes/:id', (req, res) => {})
+// Fazer depósitos
+app.patch('clientes/:id/deposito', (req, res) => {
+  const idCliente = req.params.id
+  const deposito = req.body
+
+  const existeCliente = listaClientesBancarios.find(
+    cliente => cliente.id == idCliente
+  )
+
+  if (existeCliente) {
+    const novoSaldoCliente = {
+      ...existeCliente.conta,
+      saldo: existeCliente.conta.saldo + deposito
+    }
+    listaClientesBancarios.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        listaClientesBancarios[index] = novoSaldoCliente
+      }
+    })
+    return res.status(202).json({
+      message: 'Depósito efetuado com sucesso!',
+      conta: novoSaldoCliente
+    })
+  }
+  return res
+    .status(404)
+    .json({ message: 'Não é possível fazer depósito em conta inexistente' })
+})
+
+// Fazer pagamentos
+app.patch('/clientes/:id/pagamento', (req, res) => {
+  const idCliente = req.params.id
+  const pagamento = req.body
+
+  const existeCliente = listaClientesBancarios.find(
+    cliente => cliente.id == idCliente
+  )
+
+  if (existeCliente) {
+    const novoSaldo = {
+      ...existeCliente.conta,
+      saldo: existeCliente.conta.saldo - pagamento
+    }
+
+    listaClientesBancarios.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        contasClientes[index].conta = novoSaldo
+      }
+    })
+    return res.status(200).json(novoSaldo)
+  }
+  if (existeCliente.conta.saldo < pagamento) {
+    return res.status(404).json({ message: 'Saldo insuficiente' })
+  }
+})
 
 // Encerrar contas de clientes
-app.delete('/clientes/:id', (req, res) => {
+app.delete('/clientes/:id/delete', (req, res) => {
   const idCliente = req.params.id
   const existeCliente = listaClientesBancarios.find(
     cliente => cliente.id == idCliente
@@ -78,13 +151,26 @@ app.delete('/clientes/:id', (req, res) => {
         listaClientesBancarios.splice(index, 1)
       }
     })
-    return res
-      .status(200)
-      .json({ message: 'Cliente removido!!', cliente: existeCliente })
+    return res.status(200).json({ message: 'Cliente removido!!' })
   }
   return res.status(404).json({ message: 'Cliente não encontrado!!' })
 })
 // Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... [EM PROGRESS]
+app.get('/clientes', (req, res) => {
+  const filtroPorNome = req.query.nome
+  const filtroPorSaldo = req.query.conta
+
+  const filtroClientes = listaClientesBancarios.filter(cliente => {
+    if (filtroPorNome) {
+      return cliente.nome_cliente.toLowerCase() == filtroPorNome.toLowerCase()
+    }
+    if (filtroPorSaldo) {
+      return cliente.conta.saldo == filtroPorSaldo
+    }
+    return cliente
+  })
+  res.json(filtroClientes)
+})
 
 app.listen(port, () => {
   console.log('API is ON, baby!!')
