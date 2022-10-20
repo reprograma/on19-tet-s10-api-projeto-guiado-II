@@ -1,7 +1,7 @@
 {
-  "name": "exercicio-para-sala",
+  "name": "projeto-contas-clientes",
   "version": "1.0.0",
-  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+  "description": "Projeto Guiado - Contas Clientes",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -9,7 +9,9 @@
   "author": "Bianca Trindade",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
