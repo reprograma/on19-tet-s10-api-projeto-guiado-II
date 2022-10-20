@@ -47,14 +47,15 @@ app.post ('/cliente/novo', (req, res) => {
     return res.status(400).json('Nome do cliente não pode ficar em branco')
 })
 
-// Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
+// Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... - DONE?
 
 app.get ('/cliente', (req, res) => {
     const nomeFiltro = req.query.nome
-//  const criacaoFiltro = req.query.criacaoFiltro - não sei como ler data
+//  const criacaoFiltro = req.query.criacao - não sei como ler data
     const contaFiltro = req.query.conta
     const saldoFiltro = req.query.saldo
 //  const nascFiltro = req.query.nascimento - tbm nao sei ler essa data
+    const cpfFiltro = req.query.cpf
 
     const clientesFiltrados = listaClientes.filter ((cliente, index) => {
         if (nomeFiltro){
@@ -66,6 +67,9 @@ app.get ('/cliente', (req, res) => {
         if (saldoFiltro){
             if (cliente.conta.saldo <= saldoFiltro) return cliente
         }
+        if (cpfFiltro){
+            if (cliente.conta.cpf_cliente == cpfFiltro) return cliente
+        }
         
     })
     if (clientesFiltrados.length == 0){
@@ -76,13 +80,25 @@ app.get ('/cliente', (req, res) => {
     }
 })   
 
-// Atualizar informações desses clientes ( como endereço, telefone de contato...)
+// Atualizar informações desses clientes ( como endereço, telefone de contato...) - DONE
 
 app.patch ('/cliente/:id/atualizar', (req, res) => {
     const clienteID = req.params.id
     const dadosAtualizados = req.body
 
-    
+    const clienteExiste = listaClientes.find ( cliente => cliente.id == clienteID)
+    if (clienteExiste){
+        listaClientes.map ((cliente, index) => {
+            if (cliente.id == clienteID){
+                const infosAtualizadas = {
+                    ...clienteExiste, ...dadosAtualizados
+                }
+                listaClientes[index] = infosAtualizadas
+            }
+        })
+        return res.status(202).json({message:`Dados do cliente atualizados com sucesso`})
+    }
+    return res.status(404).json({message:"Cliente não encontrado"})
 })
 
 // Fazer depósitos / pagamentos usando o saldo de sua conta - DONE
