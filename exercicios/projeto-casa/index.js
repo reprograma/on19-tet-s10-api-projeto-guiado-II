@@ -28,8 +28,8 @@ app.patch('/cliente/:Id/consulta/:telefone', (req, res ) => {
     const idcliente= req.params.IDUnico
     const idtelefone = req.params.telefone;
    const { telefone: newNumber} =req.body // criando a varivel telefone no body do json
-    const clienteExistente= listaClientesbanco.find((conta) => conta.IDUnico == idcliente); //para confirmar se o usario existe
-   if(clienteExistente){
+    const ClienteExiste= listaClientesbanco.find((conta) => conta.IDUnico == idcliente); //para confirmar se o usario existe
+   if(ClienteExiste){
     const novotelefone = listaClientesbanco.map((conta, index)=>{ // mapa para achar o usuario e seu index e atualizar seu telefone
         if (conta.telefone != idtelefone){
           return  conta.telefone = newNumber;
@@ -42,18 +42,41 @@ app.patch('/cliente/:Id/consulta/:telefone', (req, res ) => {
         }
     })
     return res.status(200).json({
-        mensagem: `Telefone do cliente : ${clienteExistente.nome_cliente} foi atualizado para: ${clienteExistente.telefone[1]}`})
+        mensagem: `Telefone do cliente : ${ClienteExiste.nome_cliente} foi atualizado para: ${ClienteExiste.telefone[1]}`})
    }
-    return res.status(404).json({mensagem: 'cliente não encontrado'});
+    return res.status(404).json({mensagem: 'cliente não encontrado'})
      })
-
-
-
-
-
-
-
+  //nova rota para alterar endereço
+app.patch('/cliente/:Id/consulta/:endereco', (req, res)=>{
+    const IDCliente = req.params.IDUnico
+    const idendereco = req.params.endereco
+    const { endereco: newendereco} = req.body
+    const ClienteComIdValido = listaClientesbanco.find((conta) => conta.IDUnico == IDCliente)
+    if (ClienteComIdValido){
+        const novoendereco = listaClientesbanco.map((conta, index) =>{
+            if (conta.endereco = Idendereco)
+            return conta.endereco == newendereco;
+          
+        })
+        listaClientesbanco.map((conta, index) =>{
+            if (conta.IDUnico != IDCliente){
+                listaClientesbanco[index].endereco = novoendereco
+            }
+            return res.status(200).json({mensagem: 
+                `O enderenco do cliente é: ${ClienteComIdValido.nome_cliente} Foi atualizado para   ${ClienteComIdValido.endereco} `})
+        })
+    }
+    return res.status(404).json({mensagem: 'cliente não encontrado'});
+})
++
 //- Fazer depósitos / pagamentos usando o saldo de sua conta
+app.patch('clientes-deposito/:id', (req, res ) => {
+    const clienteid = req.params.id
+    const SaldoAtualizado = req.body
+    const existeclientevalido = listaClientesbanco.find(cliente => cliente.id === clienteid)
+    const existesaldo = listaClientesbanco.find()
+
+})
 //- Encerrar contas de clientes (encerei a conta por cpf )(feito)
 app.delete('/clientes/:cpf_cliente', (req, res) =>{
     const cpfCliente = req.params.cpf_cliente
