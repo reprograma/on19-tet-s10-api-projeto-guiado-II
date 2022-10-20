@@ -36,7 +36,7 @@ app.post("/conta/add", (req, res) => {
     return res.status(201).json(contasClientes);
   }
   return res.status(404).json({
-    messagem: `Cliente com CPF: ${cpf_cliente} já possui conta cadastrada neste Banco`,
+    messagem: `Cliente com CPF: ${cpf_cliente} já possui conta cadastrada na ReproBank`,
   });
 });
 
@@ -87,7 +87,7 @@ app.patch("/conta/:id/deposito", (req, res) => {
     });
     return res.status(200).json(contasClientes);
   }
-  return res.status(404).json({ messagem: "Cliente não foi encontrado" });
+  return res.status(404).json({ messagem: "Não foi possível realizar o depósito! Tente novamente!" });
 });
 
 app.patch("/conta/:id/pagamento", (req, res) => {
@@ -98,7 +98,7 @@ app.patch("/conta/:id/pagamento", (req, res) => {
     (cliente) => cliente.id == idCliente
   );
 
-  if (clienteExiste) {
+  if (clienteExiste.conta.saldo >= pagamento) {
     const efetuarPagamento = {
       ...clienteExiste.conta,
       saldo: clienteExiste.conta.saldo - pagamento,
@@ -111,7 +111,7 @@ app.patch("/conta/:id/pagamento", (req, res) => {
     });
     return res.status(200).json(contasClientes);
   }
-  return res.status(404).json({ messagem: "Cliente não foi encontrado" });
+  return res.status(404).json({ messagem: "O pagamento que está tentando realizar é maior que o saldo atual" });
 });
 
 // - Encerrar contas de clientes
