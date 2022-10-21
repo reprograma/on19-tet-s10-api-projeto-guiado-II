@@ -109,3 +109,7 @@ app.post('/clientes/add', (req, res) => {
         message:"Cliente não foi encontrado"
     })
   })
+  app.listen(port, () => {
+    console.log(`API está rodando na porta ${port}`);
+  });
+  
