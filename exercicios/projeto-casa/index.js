@@ -111,6 +111,11 @@ app.delete("/clientes/:id", (req, res) => {
   return res.status(404).json({ message: `Cliente não foi encontrado.` });
 });
 
+//- Listar todos os clientes do banco
+app.get("/clientes/lista", (req, res) => {
+  res.json(listaDeClientes);
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
