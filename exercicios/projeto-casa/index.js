@@ -51,6 +51,47 @@ app.patch("/clientes/:id", (req, res) => {
   return res.status(404).json({ message: `Cliente não encontrado.` });
 });
 
+
+// - Fazer depósitos / pagamentos usando o saldo de sua conta - DONE
+app.patch("/clientes/:id/transacao", (req, res) => {
+  const IDCliente = req.params.id;
+  const transacao = Object.keys(req.query);
+
+  const cliente = listaDeClientes.find((cliente) => cliente.id == IDCliente);
+
+  if (cliente) {
+    if (transacao == "deposito") {
+      listaDeClientes.map((cliente) => {
+        if (cliente.id == IDCliente) {
+          const valorDeposito = +Object.values(req.query);
+          if (valorDeposito <= 0) {
+            return res.json({ message: "Valor inválido." });
+          }
+          const saldoFinal = (cliente.conta.saldo += valorDeposito).toFixed(2);
+          return saldoFinal;
+        }
+      });
+      return res.send({ message: `Depósito realizado com sucesso` });
+    }
+    if (transacao == "pagamento") {
+      listaDeClientes.map((cliente) => {
+        if (cliente.id === IDCliente) {
+          const valorPagamento = +Object.values(req.query);
+          if (cliente.conta.saldo < valorPagamento) {
+            res.send({ message: "Saldo insuficiente." });
+            return;
+          }
+          return (cliente.conta.saldo -= valorPagamento).toFixed(2);
+        }
+      });
+    }
+    return res.status(200).json({
+      message: `Pagamento realizado com sucesso`,
+    });
+  }
+  return res.status(404).json({ message: `Cliente não encontrado.` });
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
