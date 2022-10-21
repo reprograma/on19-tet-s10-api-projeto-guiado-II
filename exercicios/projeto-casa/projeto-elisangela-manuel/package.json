@@ -1,0 +1,27 @@
+{
+  "name": "projeto-elisangela-manuel-bankreprograma",
+  "version": "1.0.0",
+  "description": "Projeto Guiado REST API: GET + POST + DELETE + PUT + PATCH",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "JavaScript",
+    "Node.JS",
+    "Express.JS"
+  ],
+  "author": "Elisângela Manuel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
