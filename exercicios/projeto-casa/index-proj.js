@@ -29,7 +29,7 @@ app.post("/conta/add", (req, res) => {
         numero: novaConta,
         tipo,
         saldo: 0,
-        data_criacao: new Date().toISOString()
+        data_criacao: new Date().toISOString(),
         //.toString()
         //.toLocaleString('br', { timeZone: 'America/Sao_Paulo' }),
       },
@@ -43,29 +43,23 @@ app.post("/conta/add", (req, res) => {
 });
 
 // - Atualizar informações desses clientes ( como endereço, telefone de contato...)
-app.patch("/conta/:id/consulta/:telefone", (req, res) => {
+app.patch("/conta/:id/consulta", (req, res) => {
   const idCliente = req.params.id;
-  const idTelefone = req.params.telefone;
   const { telefone: newNumber } = req.body;
 
   const existeCliente = contasClientes.find((conta) => conta.id == idCliente);
 
   if (existeCliente) {
     const atualizarCliente = contasClientes.map((conta) => {
-      if (conta.id == idCliente && conta.telefone != idTelefone) {
-        conta.telefone = newNumber;
-      }
+      conta.telefone = newNumber;
+
       return { ...conta };
-    });
-    contasClientes.map((cliente, index) => {
-      if (cliente.id == idCliente) {
-        contasClientes[index].conta = atualizarCliente;
-      }
     });
     return res.status(200).json(atualizarCliente);
   }
-
-  return res.status(404).json({ messagem: "Cliente não foi encontrado" });
+  return res
+    .status(404)
+    .json({ messagem: "Cliente não foi encontrado. Digite o ID correto." });
 });
 // - Fazer depósitos / pagamentos usando o saldo de sua conta
 app.patch("/conta/:id/deposito", (req, res) => {
@@ -89,7 +83,10 @@ app.patch("/conta/:id/deposito", (req, res) => {
     });
     return res.status(200).json(contasClientes);
   }
-  return res.status(404).json({ messagem: "Não foi possível realizar o depósito! Tente novamente!" });
+  return res.status(404).json({
+    messagem:
+      "Não foi possível realizar o depósito, o cliente não foi encontrado! Tente novamente!",
+  });
 });
 
 app.patch("/conta/:id/pagamento", (req, res) => {
@@ -113,34 +110,37 @@ app.patch("/conta/:id/pagamento", (req, res) => {
     });
     return res.status(200).json(contasClientes);
   }
-  return res.status(404).json({ messagem: "O pagamento que está tentando realizar é maior que o saldo atual" });
+  return res.status(400).json({
+    messagem:
+      "O pagamento que está tentando realizar é maior que o saldo atual",
+  });
 });
 
 // - Encerrar contas de clientes
 app.delete("/conta/deletar/:id", (req, res) => {
-  const idUser = req.params.id;
+  const idCliente = req.params.id;
 
-  const existeCliente = contasClientes.find((conta) => conta.id == idUser);
+  const existeCliente = contasClientes.find((conta) => conta.id == idCliente);
 
   if (existeCliente) {
-    contasClientes.map((user, index) => {
-      if (user.id == idUser) {
+    contasClientes.map((conta, index) => {
+      if (conta.id == idCliente) {
         return contasClientes.splice(index, 1);
       }
     });
     return res.status(200).json(contasClientes);
   }
   return res.status(404).json({
-    message: "O usuário não foi encontrado. Digite o ID correto",
+    message: "O cliente não foi encontrado. Digite o ID correto",
   });
 });
 // - Conseguir Filtrar os clientes do banco pelo seu nome, por saldo...
 app.get("/conta/filtros", (req, res) => {
-  const filtrarNome = req.query.nome;
-  const filtrarNascimento = req.query.data;
-  const filtrarSaldo = parseFloat(req.query.saldo);
+  const filtrarNome = req.params.nome;
+  const filtrarNascimento = req.params.data;
+  const filtrarSaldo = parseFloat(req.params.saldo);
 
-  const prodFiltros = contasClientes.filter((item) => {
+  const prodFiltros = contasClientes.find((item) => {
     if (filtrarNome) {
       return item.nome_cliente.toLowerCase() == filtrarNome.toLowerCase();
     }
