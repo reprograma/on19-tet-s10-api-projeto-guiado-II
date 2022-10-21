@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000
-const { v4: uuidv4 } = require('uuid')
-//const novaConta = Math.floor(Math.random()* 5194728);
+const { v4: uuidv4 } = require("uuid")
+//const novaConta = Math.floor(Math.random()* 20000000000);
 const listaClientes = require('./model/contas-clientes.json');
 app.use(express.json());
 
@@ -11,7 +11,7 @@ app.get('/clientes', (req, res) =>{
 })
 
 
-// - banco
+// - Clientes do banco:
 
 app.post('/clientes/add', (req, res) => {
     const { nome_cliente,
@@ -23,7 +23,7 @@ app.post('/clientes/add', (req, res) => {
     const IDUnico = uuidv4();
 
     const novoCliente = {
-      id: IDUnico,
+      id: uuidv4(),
       nome_cliente,
       cpf_cliente,
       data_nascimento,
@@ -31,7 +31,7 @@ app.post('/clientes/add', (req, res) => {
         numero : novaConta ,
         tipo,
         saldo,
-        data_criacao: new Date,
+        data_criacao: new Date(),
       } 
     };
 
@@ -106,10 +106,12 @@ app.post('/clientes/add', (req, res) => {
            message:`O usuário ${locCliente.nome_cliente} foi retirado do banco de dados com sucesso`})
     }
     return res.status(404).json({
-        message:"Cliente não foi encontrado"
+        message:"Cliente não foi encontrado, tente novamente ou verifique os dados."
     })
   })
-  app.listen(port, () => {
-    console.log(`API está rodando na porta ${port}`);
-  });
+
+  //porta
+ app.listen(port, () => {
+  console.log(`API está rodando na porta ${port}`);
+});
   
