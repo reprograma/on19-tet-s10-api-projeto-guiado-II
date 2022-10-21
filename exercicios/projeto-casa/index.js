@@ -147,6 +147,14 @@ app.get("/clientes", (req, res) => {
   res.json(cliente);
 });
 
+//- Listar cliente por id
+app.get("/clientes/:id", (req, res) => {
+  const id = req.params.id;
+
+  const cliente = listaDeClientes.filter((item) => item.id == id);
+  res.json(cliente);
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
