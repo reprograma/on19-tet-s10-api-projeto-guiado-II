@@ -51,7 +51,6 @@ app.patch("/clientes/:id", (req, res) => {
   return res.status(404).json({ message: `Cliente não encontrado.` });
 });
 
-
 // - Fazer depósitos / pagamentos usando o saldo de sua conta - DONE
 app.patch("/clientes/:id/transacao", (req, res) => {
   const IDCliente = req.params.id;
@@ -90,6 +89,26 @@ app.patch("/clientes/:id/transacao", (req, res) => {
     });
   }
   return res.status(404).json({ message: `Cliente não encontrado.` });
+});
+
+// - Encerrar contas de clientes - DONE
+app.delete("/clientes/:id", (req, res) => {
+  const IDCliente = req.params.id;
+
+  const cliente = listaDeClientes.find((cliente) => cliente.id == IDCliente);
+
+  if (cliente) {
+    listaDeClientes.map((cliente, index) => {
+      if (cliente.id == IDCliente) {
+        return listaDeClientes.splice(index, 1);
+      }
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Conta encerrada com sucesso", cliente: cliente });
+  }
+  return res.status(404).json({ message: `Cliente não foi encontrado.` });
 });
 
 app.listen(port, () => {
