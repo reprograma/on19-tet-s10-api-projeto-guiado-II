@@ -1,9 +1,9 @@
 const express = require("express");
-const index = require("uuid-random");
 const app = express();
 const port = 3000;
 const uuid = require("uuid-random");
 const novaConta = Math.floor(Math.random() * 10000000);
+const saldo = 0
 
 app.use(express.json());
 
@@ -16,7 +16,7 @@ app.post("/contas/add", (req, res) => {
     nome_cliente,
     cpf_cliente,
     data_nascimento,
-    conta: { tipo, saldo },
+    conta: { tipo },
   } = req.body;
   const existeContaComCpf = contasClientes.find(
     (conta) => conta.cpf_cliente == cpf_cliente
@@ -31,22 +31,21 @@ app.post("/contas/add", (req, res) => {
       conta: {
         numero: novaConta,
         tipo,
-        saldo,
-        data_criacao: new Date().toISOString(),
+      data_criacao: new Date().toISOString(),
       },
     };
     contasClientes.push(novoClienteComCpf);
     return res.status(200).json(novoClienteComCpf);
   }
   return res.status(404).json({
-    messagem: `Cliente com CPF: ${cpf_cliente} já possui conta cadastrada neste Banco`,
+    menssagem: `Cliente com CPF: ${cpf_cliente} já possui conta cadastrada neste Banco`,
   });
 });
 
 // [DONE]- Atualizar informações desses clientes ( como endereço, telefone de contato...)
 app.patch("/contas/:cpf_cliente", (req, res) => {
   const cpfCliente = req.params.cpf_cliente;
-  const endereço_cliente = req.body;
+  const endereco_cliente = req.body;
 
   const existeContaComCpf = contasClientes.find(
     (conta) => conta.cpf_cliente == cpfCliente
@@ -55,13 +54,13 @@ app.patch("/contas/:cpf_cliente", (req, res) => {
   if (existeContaComCpf) {
     const clienteAtualizado = {
       ...existeContaComCpf,
-      endereço_cliente,
+      endereco_cliente,
     };
     contasClientes.map((cliente, index) => {
       if (cliente.cpf_cliente == cpfCliente) {
-        contasClientes.push({
-          ...endereço_cliente,
-        });
+        contasClientes[index] = clienteAtualizado
+        return (contasClientes[index] = clienteAtualizado);
+       
       }
     });
 
@@ -110,30 +109,28 @@ app.patch("/conta/pagamento", (req, res) => {
   const existeConta = contasClientes.find(
     (conta) => contasClientes.cpf_cliente == cpfClienteContaRealizaPagamento
   );
-  if (existeConta) {
-    const existeSaldoSuficiente = contasClientes.find(
-      (conta) => contasClientes.conta.saldo >= valorPagamento
-      
-    );
-    if (existeSaldoSuficiente) {
-      const pagamentoRealizado = {
-        ...existeConta.conta,
-        saldo: saldo.conta.saldo - valorPagamento,
-      };
-      contasClientes.map((cliente, index) => {
-        if (cpfClienteContaRealizaPagamento == cpf_cliente) {
-          contasClientes.push({
-            ...pagamentoRealizado,
-          });
-        }
-      });
-    }
+  if (existeConta.conta.saldo >= valorPagamento) {
+    const pagamentoRealizado = {
+      ...existeConta.conta,
+      saldo: saldo.conta.saldo - valorPagamento,
+    };
+    contasClientes.map((cliente, index) => {
+      if (contasClientes.cpf_cliente == cpfClienteContaRealizaPagamento) {
+        contasClientes.push({
+          ...pagamentoRealizado,
+        });
+      }
+    });
 
-    return res.status(200).json({ pagamentoRealizado });
+    return res.status(200).json({ 
+      message: `Pagamento realizado com sucesso. Saldo R$ ${pagamentoRealizado.saldo.toFixed(2)}`, })
+  
   }
   return;
-  res.status(404).json({ message: "Saldo insuficiente" });
+  res.status(404).json({ message: "Saldo Insuficiente" });
 });
+
+
 
 // [DONE]- Encerrar contas de clientes
 app.delete("/contas/:conta", (req, res) => {
