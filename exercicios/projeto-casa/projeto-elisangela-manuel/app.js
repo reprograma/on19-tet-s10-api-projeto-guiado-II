@@ -5,7 +5,6 @@ const { v4: uuidv4 } = require("uuid");
 uuidv4();
 const moment = require("moment")
 const clientsBankAccount = require("./model/modified-structure-clients-bank-account.json");
-const { request } = require("express");
 
 app.use(express.json());
 
@@ -22,12 +21,13 @@ function account() {
   return bankAccount();
 };
 
+
 app.get("/clients", (req, res) => {
   const filterName = req.query.name
   const filterType = req.query.type
   const filterCpf = req.query.cpf
 
-  const findedClient = clientsBankAccount.filter((client) => {
+  const findClient = clientsBankAccount.filter((client) => {
     if (filterName) {
       return client.nome_cliente.toLowerCase() == filterName.toLowerCase()
     }
@@ -41,13 +41,13 @@ app.get("/clients", (req, res) => {
     return client
   });
 
-  if (findedClient) {
-    return res.status(200).json(findedClient);
+  if (findClient) {
+    return res.status(200).json(findClient);
   } else {
     return res.status(404).json({ message: "Data not found" });
   }
-
 })
+
 
 app.post("/clients/addBankAccount", (req, res) => {
 
@@ -91,7 +91,7 @@ app.post("/clients/addBankAccount", (req, res) => {
   newClientId.conta.data_criacao = formatDate;
   newClientId.conta.numero = account();
 
-  return res.status(200).json({ ...newClientId });
+  return res.status(201).json({ ...newClientId });
 });
 
 
@@ -140,56 +140,43 @@ app.patch("/clients/updatedata/:id", (req, res) => {
   return res.status(404).json({ messagem: 'Date not found' });
 })
 
-app.patch("/clients/incomingbanktransaction/:cpf", (req, res) => {
-  const clientCpf = req.params.cpf
-  const incoming = req.body
 
-  const checkClient = clientsBankAccount.find(
-    client => client.cpf_cliente == clientCpf
-  )
+app.patch("/clients/banktransaction/:cpf", (req, res) => {
+  const clientCpf = req.params.cpf;
+  let { bankAccount } = req.body
+  bankAccount = req.body
 
-  if (checkClient) {
-    const updatedBankBalance = {
-      ...checkClient.conta,
-      saldo: clientsBankAccount.conta.saldo + incoming
-    }
-    clientsBankAccount.map((client, index) => {
-      if (client.cpf_cliente == clientCpf) {
-        clientsBankAccount[index] = updatedBankBalance
+  let index = clientsBankAccount.findIndex(client => client.cpf_cliente == clientCpf)
+
+  if (index == -1) {
+    return res.status(404).json({ message: "Account not exist" });
+  }
+
+  let updateBankAccount = {
+    ...clientsBankAccount[index],
+    ...bankAccount
+  }
+
+  clientsBankAccount.splice(index, 1, updateBankAccount)
+
+  function updateBankBalance(saldo) {
+    if (bankAccount) {
+      let currentBankBalance = saldo;
+      let newIncomingBankBalance = currentBankBalance + clientsBankAccount[index].conta.tipo.transacao_entrada;
+      clientsBankAccount[index].conta.saldo = newIncomingBankBalance;
+
+      if (clientsBankAccount[index].conta.saldo >= clientsBankAccount[index].conta.tipo.transacao_saida) {
+        let newOutgoingBankBalance = clientsBankAccount[index].conta.saldo - clientsBankAccount[index].conta.tipo.transacao_saida
+        clientsBankAccount[index].conta.saldo = newOutgoingBankBalance
+      } else {
+        return res.status(400).json({ message: "Bad request. Please, check your bank balance" });
       }
-    })
-    return res.status(201).json(clientsBankAccount[clientCpf])
-  }
-  return res.status(404).json({ message: 'Account not exist' })
-})
-
-
-app.patch("/clients/outgoingbanktransaction/:cpf", (req, res) => {
-  const clientCpf = req.params.cpf
-  const outgoing = req.body
-
-  const checkClient = clientsBankAccount.find(
-    client => client.cpf_cliente == clientCpf
-  )
-
-  if (checkClient) {
-    const updatedBankBalance = {
-      ...checkClient.conta,
-      saldo: clientsBankAccount.conta.saldo - outgoing
     }
-    clientsBankAccount.map((client, index) => {
-      if (client.cpf_cliente == clientCpf) {
-        clientsBankAccount[index] = updatedBankBalance
-      }
-    })
-    return res.status(201).json(clientsBankAccount[clientCpf])
   }
-  if (existeCliente.conta.saldo < pagamento) {
-    return res.status(404).json({ message: 'Saldo insuficiente' })
-  }
-  return res.status(404).json({ message: 'Account not exist' })
-})
+  updateBankBalance(clientsBankAccount[index].conta.saldo);
 
+  return res.status(200).json(clientsBankAccount[index]);
+});
 
 app.delete("/clients/addBankAccount/:id", (req, res) => {
   const idForDelete = req.params.id
@@ -209,6 +196,7 @@ app.delete("/clients/addBankAccount/:id", (req, res) => {
     message: "ID not Found"
   })
 })
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
