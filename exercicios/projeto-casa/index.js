@@ -25,7 +25,7 @@ return res.status(201).json(novoClienteComIDunico)
 });
 //- Atualizar informações desses clientes ( como endereço, telefone de contato...)(feito, fazer amanhã outro pacth para endereço)
 app.patch('/cliente/:Id/consulta/:telefone', (req, res ) => {
-    const idcliente= req.params.IDUnico
+    const idcliente= req.query.IDUnico
     const idtelefone = req.params.telefone;
    const { telefone: newNumber} =req.body // criando a varivel telefone no body do json
     const ClienteExiste= listaClientesbanco.find((conta) => conta.IDUnico == idcliente); //para confirmar se o usario existe
@@ -47,15 +47,15 @@ app.patch('/cliente/:Id/consulta/:telefone', (req, res ) => {
     return res.status(404).json({mensagem: 'cliente não encontrado'})
      })
   //nova rota para alterar endereço
-app.put('/endereco', (req, res)=>{ // tentativa de fazer para achar endereço mas não rolou sorry prof, não sei onde errei tentei usar a mesma lógica do telefone
-    const cpfCliente = req.query.cpf_cliente
+app.patch('/endereco/:id', (req, res)=>{ // tentativa de fazer para achar endereço mas não rolou sorry prof, não sei onde errei tentei usar a mesma lógica do telefone
+    const cpfCliente = req.params.id
     const atualizarend = req.params.edendereco
     const { endereco} = req.body
     const ClienteComIdValido = listaClientesbanco.find((conta) => conta.cpf_cliente ==cpfCliente)
     if (ClienteComIdValido){
         const novoendereco = listaClientesbanco.map((conta, index) =>{
             if (conta.endereco = atualizarend)
-            return conta.endereco == newendereco;
+            return conta.endereco == endereco;
           
         })
         listaClientesbanco.map((conta, index) =>{
@@ -70,17 +70,17 @@ app.put('/endereco', (req, res)=>{ // tentativa de fazer para achar endereço ma
 })
 +
 //- Fazer depósitos / pagamentos usando o saldo de sua conta (FEITO, Funcinou tentei fazer com req.params mas não rolou, não se poderia fazer com req.query para)
-app.patch('/deposito', (req, res ) => { 
-    const SolicitaCpfcliente = req.query.cpf_cliente // usei o query para consultar no banco se o cpf era válido
+app.patch('cliente/:idCliente/deposito', (req, res ) => { 
+    const SolicitaIDcliente = req.params.id// usei o query para consultar no banco se o cpf era válido
     const {valorDeposito} = req.body
-    const ExisteCliente = listaClientesbanco.find((cliente) => cliente.cpf_cliente == SolicitaCpfcliente)
+    const ExisteCliente = listaClientesbanco.find((cliente) => cliente.id == SolicitaIDcliente)
     if (ExisteCliente){
        const NovoSaldoConta ={ 
-        ...ExisteCliente.conta,
-        saldo: ExisteCliente.conta.saldo + valorDeposito,
+        ...ExisteCliente.usario.conta,
+        saldo: ExisteCliente.usario.conta.saldo + valorDeposito,
     } 
     listaClientesbanco.map((cliente, index)=>{
-      if (cliente.cpf_cliente == SolicitaCpfcliente){
+      if (cliente.id == SolicitaIDcliente){
         return (listaClientesbanco[index] = NovoSaldoConta)
       }
     })
@@ -90,18 +90,19 @@ app.patch('/deposito', (req, res ) => {
     return res.status(404).json({ messagem: 'Usuário não existe' }); 
 })
 // rota para saque(pagamento)(FEITO)
-app.patch('/saque', (req, res) =>{
+app.patch('/cliente/:idCliente/saque', (req, res) =>{
     const VerificaCpf = req.query.cpf_cliente
-    const {Valordosaque} = req.body
+    const {Valor_do_saque} = req.body
     const Existecliente = listaClientesbanco.find((cliente) => cliente.cpf_cliente == VerificaCpf)
-    if (Existecliente.conta.saldo >= Valordosaque){
+    if (Existecliente.conta.saldo >= Valor_do_saque){
         const Saque = {
-            ...Existecliente.conta,
-            Saldo: Existecliente.conta.saldo - Valordosaque,
+            ...Existecliente.usario.conta,
+            saldo: Existecliente.usario.conta.saldo - Valor_do_saque,
         }
+
         listaClientesbanco.map((cliente, index) =>{
             if (cliente.cpf_cliente == VerificaCpf)
-            return (listaClientesbanco[index] = Valordosaque)
+            return (listaClientesbanco[index] =Valor_do_saque)
         } )
         res.status(202).json(Saque)
     }
@@ -139,7 +140,7 @@ app.get('/clientes', (req, res) =>{
         
       return item
     })
-    res.json(filtrando)
+    res.status(200).json(filtrando)
 }  )
 
 app.listen(port, () =>{
