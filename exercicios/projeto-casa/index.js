@@ -27,6 +27,30 @@ app.post("/clientes", (req, res) => {
   return res.status(201).json(novoCliente);
 });
 
+// - Atualizar informações desses clientes - DONE
+app.patch("/clientes/:id", (req, res) => {
+  const IDCliente = req.params.id;
+  const nome_cliente = req.body;
+
+  const cliente = listaDeClientes.find((cliente) => cliente.id == IDCliente);
+
+  if (cliente) {
+    const clienteAtualzado = {
+      ...cliente,
+      ...nome_cliente,
+    };
+    listaDeClientes.map((cliente, index) => {
+      if (cliente.id == IDCliente) {
+        listaDeClientes[index] = clienteAtualzado;
+      }
+    });
+    return res.status(200).json({
+      message: `O cliente ${cliente.nome_cliente} foi atualizado com sucesso`,
+    });
+  }
+  return res.status(404).json({ message: `Cliente não encontrado.` });
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
