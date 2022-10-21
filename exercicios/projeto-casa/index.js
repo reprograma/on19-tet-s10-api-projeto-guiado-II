@@ -58,8 +58,7 @@ app.post('/clientes/novo', (req, res) => {
 // Atualizar informações desses clientes ( como endereço, telefone de contato...)
 app.patch('/clientes/:id/atualiza', (req, res) => {
   const idCliente = req.params.id
-  const enderecoAtualizado = req.body
-  const telefoneAtualizado = req.body
+  const dadosAtualizados = req.body
 
   const existeCliente = listaClientesBancarios.find(
     cliente => cliente.id == idCliente
@@ -68,8 +67,7 @@ app.patch('/clientes/:id/atualiza', (req, res) => {
   if (existeCliente) {
     const clienteAtualizado = {
       ...existeCliente,
-      ...enderecoAtualizado,
-      ...telefoneAtualizado
+      ...dadosAtualizados
     }
 
     listaClientesBancarios.map((cliente, index) => {
