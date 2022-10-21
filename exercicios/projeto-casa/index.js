@@ -116,6 +116,37 @@ app.get("/clientes/lista", (req, res) => {
   res.json(listaDeClientes);
 });
 
+//- Conseguir Filtrar os clientes do banco pelo seu nome, por saldo. DONE
+app.get("/clientes", (req, res) => {
+  const filtroSaldo = req.query;
+  const filtroCpf = req.query.cpf_cliente;
+  const filtroEmail = req.query.email;
+  const filtroNome = req.query.nome_cliente;
+
+  const cliente = listaDeClientes.filter((item) => {
+    if (filtroSaldo) {
+      return item.conta.saldo == filtroSaldo.saldo;
+    }
+    if (filtroCpf) {
+      return (
+        item.cpf_cliente.replace(/[^\d]/g, "") ==
+        filtroCpf.replace(/[^\d]/g, "")
+      );
+    }
+    if (filtroEmail) {
+      return item.email === filtroEmail;
+    }
+    if (filtroNome) {
+      return (
+        item.nome_cliente.toLowerCase().replace(/ /g, "") ==
+        filtroNome.toLowerCase().replace(/ /g, "")
+      );
+    }
+    return item;
+  });
+  res.json(cliente);
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
