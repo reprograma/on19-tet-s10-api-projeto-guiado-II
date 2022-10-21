@@ -11,7 +11,7 @@ app.use(express.json());
 app.post('/clientes/add', (req, res) => {
   const { nome_cliente, cpf_cliente, data_nascimento, conta:{tipo,}} = req.body;
   const IDUnico = uuid.v4();
-  const numeroConta = Math.random();;
+  const numeroConta = Math.floor(Math.random() * 1000000)
   const dataCriacao = moment().format('DD/MM/YYYY');
 
   const existeCPF = listaClientesBanco.find(
