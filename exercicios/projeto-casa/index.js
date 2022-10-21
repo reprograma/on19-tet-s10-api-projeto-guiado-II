@@ -9,7 +9,7 @@ app.use(express.json());
 
 //- Criar os clientes do banco  - http://localhost:3030/clientes/add
 app.post('/clientes/add', (req, res) => {
-  const { nome_cliente, cpf_cliente, data_nascimento, conta:{numero, tipo,saldo,data_criacao}} = req.body;
+  const { nome_cliente, cpf_cliente, data_nascimento, conta:{tipo,}} = req.body;
   const IDUnico = uuid.v4();
   const numeroConta = Math.random();;
   const dataCriacao = moment().format('DD/MM/YYYY');
@@ -25,20 +25,20 @@ app.post('/clientes/add', (req, res) => {
         data_nascimento,
           conta:{numero:numeroConta,
             tipo,
-            saldo,
+            saldo:0,
             data_criacao:dataCriacao
         }
     }
     listaClientesBanco.push(novaContaComID);
     return res.status(201).json(novaContaComID);
   }
-  return res.status(404).json({ messagem: 'Cliente já existe' });
+  return res.status(404).json({ messagem: 'O cliente já existe' });
   });
 
 //- Atualizar informações desses clientes ( como endereço, telefone de contato...) - http://localhost:3030/clientes/32b2fd22-f8dd-488a-a65c-d7cca8b5f975/atualizar
 app.patch('/clientes/:idCliente/atualizar', (req, res) => {
   const idCliente = req.params.idCliente;
-  const { telefone, endereço:{cidade,CEP,estado} } = req.body;
+  const { telefone, endereco:{cidade,CEP,estado} } = req.body;
 
   const clienteExiste = listaClientesBanco.find(
     (cliente) => cliente.id == idCliente
@@ -48,7 +48,7 @@ app.patch('/clientes/:idCliente/atualizar', (req, res) => {
     const atualizarDados = {
       ...clienteExiste,
       telefone,
-      endereço:{
+      endereco:{
         cidade,
         CEP,
         estado
@@ -60,10 +60,10 @@ app.patch('/clientes/:idCliente/atualizar', (req, res) => {
       }
     });
     return res.status(200).json({
-      message:`O usuário ${clienteExiste.nome_cliente} foi atualizado com sucesso`
+      message:`O cliente ${clienteExiste.nome_cliente} foi atualizado com sucesso`
     })    
   }
-  return res.status(404).json({ messagem: 'Usuário não existe' });  
+  return res.status(404).json({ messagem: 'O cliente não existe' });  
 });
 
 //- Fazer depósitos / pagamentos usando o saldo de sua conta - 
@@ -118,14 +118,14 @@ app.patch('/clientes/:id/pagamento', (req,res)=>{
       message: `O pagammento foi realizado com sucesso.Saldo R$ ${transacaoPagamento.saldo.toFixed(2)}`,
   })
   }
-return res.status(404).json({ messagem: 'Saldo insuficiente' });  
+return res.status(400).json({ messagem: 'Saldo insuficiente' });  
 })
 
 //- Encerrar contas de clientes -  http://localhost:3030/clientes/e0077787-42c1-4c0d-945b-b16787951446
 app.delete("/clientes/:id",(req,res)=>{
   const idCliente = req.params.id
 
-  const clienteExiste = listaClientesBanco.find((user)=> user.id == idCliente)
+  const clienteExiste = listaClientesBanco.find((cliente)=> cliente.id == idCliente)
 
   if(clienteExiste){
       listaClientesBanco.map((cliente,index)=>{
@@ -135,21 +135,21 @@ app.delete("/clientes/:id",(req,res)=>{
           
       })
       return res.status(200).json({
-         message:`O usuário ${clienteExiste.nome_cliente} foi deletado com sucesso`})
+         message:`O cliente ${clienteExiste.nome_cliente} foi deletado com sucesso`})
   }
   return res.status(404).json({
-      message:"Cliente não foi encontarado"
+      message:"O cliente não foi encontarado"
   })
 })
 
 //- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
 //http://localhost:3030/clientes?nome=Franklin
 //http://localhost:3030/clientes?saldo=47291.98
-//http://localhost:3030/clientes?cpf=514.196.671-22
+//http://localhost:3030/clientes?tipoConta=poupança
 app.get('/clientes',(req,res)=>{
   const filtraPorNome = req.query.nome?.toLowerCase()
   const FiltraPorSaldo = req.query.saldo
-  const FiltraPorCPF = req.query.cpf
+  const FiltraPorTipoConta = req.query.tipoConta?.toLowerCase()
 
     const filtroEscolhido = listaClientesBanco.filter((conta) => {
     
@@ -159,11 +159,10 @@ app.get('/clientes',(req,res)=>{
       if (FiltraPorSaldo) {
         return conta.conta.saldo == FiltraPorSaldo;
       }
-      if (FiltraPorCPF) {
-        return conta.cpf_cliente == FiltraPorCPF;
+      if (FiltraPorTipoConta) {
+        return conta.conta.tipo == FiltraPorTipoConta;
       }
       return conta
-  
     })
   return res.status(200).json(filtroEscolhido);
 })
