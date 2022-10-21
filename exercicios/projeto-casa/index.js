@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000
 const { v4: uuidv4 } = require("uuid")
-//const novaConta = Math.floor(Math.random()* 20000000000);
+const novaConta = Math.floor(Math.random()* 100000000);
 const listaClientes = require('./model/contas-clientes.json');
 app.use(express.json());
 
