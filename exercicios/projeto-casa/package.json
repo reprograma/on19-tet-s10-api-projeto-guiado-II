@@ -1,15 +1,17 @@
 {
-  "name": "exercicio-para-sala",
+  "name": "projeto-ii",
   "version": "1.0.0",
-  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+  "description": "BankReprograma",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
   "author": "Liliane Gomes",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid-random": "^1.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

@@ -132,6 +132,7 @@ app.patch('/clientes/:id', (req, res) => {
     listaClientes.map((cliente, index) => {
       if (cliente.id == idCliente) {
         listaClientes[index] = usuarioAtualizado;
+        return (listaClientes[index] = usuarioAtualizado); 
       }
     });
     return res.status(200).json({
