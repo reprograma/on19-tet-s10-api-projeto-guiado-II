@@ -8,6 +8,10 @@ const listaClientes = require ("./model/contas-clientes.json")
 
 app.use (express.json())
 
+const random = (min, max) => {
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    return num;
+  }  
 
 app.get ('/clientes', (req, res) => {
     return res.json (listaClientes)
@@ -15,36 +19,32 @@ app.get ('/clientes', (req, res) => {
 
 // Criar os clientes do banco - DONE
 
-let numeroConta = 1
 app.post ('/cliente/novo', (req, res) => {
     const {nome_cliente, cpf_cliente, data_nascimento, conta} = req.body
-    if (nome_cliente){
-        if (cpf_cliente){
-            if (data_nascimento){
-                if (conta.tipo){
-                    const contaNova = {
-                        "id": uuidv4(),
-                        "nome_cliente": nome_cliente,
-                        "cpf_cliente": cpf_cliente,
-                        "data_nascimento": data_nascimento,
-                        "conta": {
-                            "numero": numeroConta, //não entendi como pegar o número da conta, se é pra pegar em relacao as outras, pegar a maior e seguir por ali ou entao algum RNG
-                            "tipo": conta.tipo,
-                            "saldo": 0,
-                            "data_criacao": new Date()
-                        }
-                    }
-                    numeroConta++
-                    listaClientes.push (contaNova)
-                    return res.status (201).json ({message: 'Conta criada'})
-                }
-                return res.status(400).json('Tipo de conta não pode ficar em branco')
-            }
-            return res.status(400).json('Data de nascimento do cliente não pode ficar em branco')
-        }
-        return res.status(400).json('CPF do cliente não pode ficar em branco')
+
+    const faltaAlgo = []
+    if (! nome_cliente) faltaAlgo.push('nome_cliente')
+    if (! cpf_cliente) faltaAlgo.push('CPF')
+    if (! data_nascimento) faltaAlgo.push('data_nascimento')
+    if (! conta.tipo) faltaAlgo.push('conta: { tipo }')
+    if (faltaAlgo.length != 0){
+        const faltante = faltaAlgo.join(", ")
+        return res.status(400).json({message: `Os seguintes dados obrigatório estão em branco: ${faltante}`})
     }
-    return res.status(400).json('Nome do cliente não pode ficar em branco')
+    const contaNova = {
+        "id": uuidv4(),
+        "nome_cliente": nome_cliente,
+        "cpf_cliente": cpf_cliente,
+        "data_nascimento": data_nascimento,
+        "conta": {
+            "numero": random(1, 999999), 
+            "tipo": conta.tipo,
+            "saldo": 0,
+            "data_criacao": new Date()
+        }
+    }
+    listaClientes.push (contaNova)
+    return res.status (201).json ({message: 'Conta criada'})
 })
 
 // Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... - DONE?
@@ -68,7 +68,7 @@ app.get ('/cliente', (req, res) => {
             if (cliente.conta.saldo <= saldoFiltro) return cliente
         }
         if (cpfFiltro){
-            if (cliente.conta.cpf_cliente == cpfFiltro) return cliente
+            if (cliente.conta.cpf_cliente.includes(cpfFiltro)) return cliente
         }
         
     })
@@ -107,11 +107,7 @@ app.patch ('/cliente/:id/saldo', (req, res) => {
     const clienteID = req.params.id
     const { operacao } = req.body
 
-    const contaExiste = listaClientes.find((conta, index) => {
-        if (conta.id == clienteID){
-            return conta
-        }
-    })
+    const contaExiste = listaClientes.find((conta, index) => conta.id == clienteID)
     if (contaExiste){
         listaClientes.map ((conta, index) => {
             if (conta.id == clienteID){
@@ -141,16 +137,14 @@ app.patch ('/cliente/:id/saldo', (req, res) => {
 app.delete ('/cliente/:id', (req, res) => {
     const clienteID = req.params.id
 
-    const contaExiste = listaClientes.find ((conta, index) => {
+    const contaExiste = listaClientes.map ((conta, index) => {
         if (conta.id == clienteID){
-            const nome = listaClientes.nome_cliente
-            const saque = listaClientes[index].conta.saldo
-            if(saque >= 0){
-                listaClientes[index].splice(index, 1)
-                return res.status(202).json ({message:`Conta fechada. ${nome_cliente} tem R$${saldo} para saque imediato`})
+            const saldo = listaClientes[index].conta.saldo
+            if(saldo >= 0){
+                listaClientes.splice(index, 1)
+                return res.status(202).json ({message:`Conta fechada. ${conta.nome_cliente} tem R$${saldo} para saque imediato`})
             }
-            saque.toString()
-            return res.status(401).json (`Conta não foi fechada devido à dívida de R$${saque.toString().slice(1)}`)
+            return res.status(401).json (`Conta não foi fechada devido à dívida de R$${Math.abs(saldo)}`)
         }
     })
     if (! contaExiste){
