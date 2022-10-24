@@ -92,13 +92,13 @@ app.patch("/pagamentos", (req, res) => {
   const cpfCliente = req.query.cpf_cliente;
   const valorpagamento = req.body;
   const existeCliente = listaClientes.find(
-    (cliente) => cliente.cpf_cliente === cpfCliente
-  );
+    (cliente) => cliente.cpf_cliente === cpfCliente);
+  const valorPagamento = - 3000
 
   if (existeCliente) {
     const novoSaldo = {
       ...existeCliente.conta,
-      saldo: valorpagamento.conta.saldo - 3000,
+      saldo: valorpagamento.conta.saldo - valorPagamento,
     };
     listaClientes.map((cliente, index) => {
       if (cliente.cpf_cliente == cpfCliente) {
