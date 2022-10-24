@@ -12,11 +12,11 @@ app.post("/clientes/add", (req, res) => {
     nome_cliente,
     cpf_cliente,
     data_nascimento,
-    conta: { tipo, saldo },
+    conta: { tipo },
   } = req.body;
   const IDUnico = uuid.v4();
-  const numeroConta = Math.random();
-  const dataCriacao = new Date();
+  const numeroConta = Math.floor(Math.random() * 10000000);
+  const dataCriacao = new Date().toISOString();
 
   const existeCpf = listaClientes.find(
     (conta) => conta.cpf_cliente == cpf_cliente
@@ -30,7 +30,6 @@ app.post("/clientes/add", (req, res) => {
       conta: {
         numero: numeroConta,
         tipo,
-        saldo,
         data_criacao: dataCriacao,
       },
     };
@@ -71,11 +70,11 @@ app.patch("/deposito", (req, res) => {
   if (existeCliente) {
     const novoSaldo = {
       ...existeCliente.conta,
-      saldo: valorDepositado.conta.saldo + 3000,
+      saldo: valorDepositado.conta.saldo,
     };
     listaClientes.map((cliente, index) => {
       if (cliente.cpf_cliente == cpfCliente) {
-        return (listaClientes[index] = novoSaldo);
+        return (listaClientes[index].conta.saldo = novoSaldo);
       }
     });
     return res.status(202).json(novoSaldo);
@@ -103,7 +102,7 @@ app.patch("/pagamentos", (req, res) => {
     };
     listaClientes.map((cliente, index) => {
       if (cliente.cpf_cliente == cpfCliente) {
-        return (listaClientes[index] = novoSaldo);
+        return (listaClientes[index].conta.saldo = novoSaldo);
       }
     });
     return res.status(202).json(novoSaldo);
@@ -139,7 +138,7 @@ app.delete("/clientes/:id", (req, res) => {
 });
 
 //- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo - DONE
-app.get("/clientes/", (req, res) => {
+app.get("/clientes", (req, res) => {
   const filtroNome = req.query.nome;
   const filtroCPF = req.query.CPF;
 
