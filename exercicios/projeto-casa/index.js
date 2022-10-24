@@ -11,6 +11,8 @@ app.post("/clientes", (req, res) => {
   const { nome_cliente, cpf_cliente, data_nascimento, email, conta } = req.body;
 
   const id = uuidv4();
+  const numeroDaConta = parseInt(Math.random() * 10000000);
+  const dataDeCriacao = new Date().toISOString();
 
   const novoCliente = {
     id,
@@ -18,11 +20,12 @@ app.post("/clientes", (req, res) => {
     cpf_cliente,
     data_nascimento,
     email,
-    conta,
+    conta: {
+      numero: numeroDaConta,
+      saldo: 0,
+      data_criacao: dataDeCriacao,
+    },
   };
-  novoCliente.conta.numero = parseInt(Math.random() * 10000000);
-  novoCliente.conta.saldo = 0;
-  novoCliente.conta.data_criacao = new Date().toISOString();
   listaDeClientes.push(novoCliente);
   return res.status(201).json(novoCliente);
 });
@@ -30,14 +33,15 @@ app.post("/clientes", (req, res) => {
 // - Atualizar informações desses clientes - DONE
 app.patch("/clientes/:id", (req, res) => {
   const IDCliente = req.params.id;
-  const nome_cliente = req.body;
+  const { nome_cliente, email }  = req.body;
 
   const cliente = listaDeClientes.find((cliente) => cliente.id == IDCliente);
 
   if (cliente) {
     const clienteAtualzado = {
       ...cliente,
-      ...nome_cliente,
+      nome_cliente,
+      email,
     };
     listaDeClientes.map((cliente, index) => {
       if (cliente.id == IDCliente) {
@@ -124,8 +128,11 @@ app.get("/clientes", (req, res) => {
   const filtroNome = req.query.nome_cliente;
 
   const cliente = listaDeClientes.filter((item) => {
-    if (filtroSaldo) {
-      return item.conta.saldo == filtroSaldo.saldo;
+    if (filtroNome) {
+      return (
+        item.nome_cliente.toLowerCase().replace(/ /g, "") ==
+        filtroNome.toLowerCase().replace(/ /g, "")
+      );
     }
     if (filtroCpf) {
       return (
@@ -136,11 +143,8 @@ app.get("/clientes", (req, res) => {
     if (filtroEmail) {
       return item.email === filtroEmail;
     }
-    if (filtroNome) {
-      return (
-        item.nome_cliente.toLowerCase().replace(/ /g, "") ==
-        filtroNome.toLowerCase().replace(/ /g, "")
-      );
+    if (filtroSaldo) {
+      return item.conta.saldo == filtroSaldo.saldo;
     }
     return item;
   });
