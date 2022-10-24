@@ -1,7 +1,7 @@
 {
-  "name": "exercicio-para-sala",
+  "name": "projeto-bank-reprograma",
   "version": "1.0.0",
-  "description": "\"API de consultório veterinário da REPROGRAMA\"",
+  "description": "projeto feito com os aprendizados da semana",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -9,7 +9,8 @@
   "author": "Cibelle Sena",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
