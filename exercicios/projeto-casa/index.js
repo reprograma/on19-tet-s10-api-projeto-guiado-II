@@ -5,9 +5,9 @@ const listaClientes = require('./model/contas-clientes.json');
 const { v4: uuidv4 } = require('uuid');
 app.use(express.json());
 
-app.get(`/contas-clientes/:nome`, (req, res) => {
-    const filtroNome = req.params.nome.toLowerCase()
-    const filtroCPF = req.params.cpf
+app.get(`/contas-clientes`, (req, res) => {
+    const filtroNome = req.quary.nome.toLowerCase()
+    const filtroCPF = req.quary.cpf
 
     const clienteFiltrado = listaClientes.filter((item) => {
 
