@@ -3,6 +3,7 @@ const app = express();
 const port = 3333;
 const listaClientes = require("./model/contas-clientes.json");
 const novaConta = Math.floor(Math.random() * 10000000);
+
 app.use(express.json());
 
 //Atualizar ID automaticamente
@@ -55,93 +56,73 @@ app.post("/clientes/add", (req, res) => {
   return res.json(novoClienteComID);
 });
 
-//PATCH - Fazer pagamentos usando o saldo de sua conta (usar o + e o -)
-
-
-
-
-// app.patch("/clientes/:id/pagamentos", (req, res) => {
-//   const idCliente = req.params.id;
-//   const { bodyRequest } = req.body;
-
-//   const filtrarCliente = listaClientes.find(
-//     (cliente) => cliente.id == idCliente
-//   );
-
-//   if (filtrarCliente == undefined) {
-//     res.status(404).send({
-//       message: "Informar um ID valido",
-//     });
-//   }
-
-//   if(filtrarCliente.conta.saldo == 0){
-//     res.status(403).send({
-//       message:'Saldo zerado'
-//     })
-//   }
-
-//   if(filtrarCliente.conta.saldo < bodyRequest){
-//     res.status(403).send({
-//       message:'Saldo Insuficiente'
-//     })
-//   }
-
-//   if(filtrarCliente.conta.saldo >= bodyRequest){
-//     filtrarCliente.conta.saldo -= bodyRequest
-//     res.status(200).send({
-//       message: 'Pagamento realizado com sucesso' ,
-//       filtrarCliente
-//     })
-//   }
-
-
-
-//PATCH - Fazer depósitos (usar o + e o -)
-
+//PATCH - Deposito
 app.patch("/clientes/:id/deposito", (req, res) => {
   const idCliente = req.params.id;
-  const { bodyRequest } = req.body;
+  let bodyRequest = req.body.conta.saldo;
+
+  filtrarCliente = listaClientes.find((cliente) => cliente.id == idCliente); //filtra id
+
+  if (filtrarCliente == undefined) {
+    res.status(404).send({ message: "Informar um Id valido" }); //filtro caso for id errado
+  }
+
+  filtrarCliente.conta.saldo += bodyRequest; //filtra atualizando o saldo
+
+  res.status(200).json([
+    {
+      mensagem: `Pagamento de R$${bodyRequest} realizado com sucesso.`,
+      filtrarCliente,
+    },
+  ]);
+});
+
+//PATCH - Pagamento
+app.patch("/clientes/:id/pagamento", (req, res) => {
+  const idCliente = req.params.id;
+  let bodyRequest = req.body.conta.saldo;
 
   const filtrarCliente = listaClientes.find(
     (cliente) => cliente.id == idCliente
-  );
+  ); //filtra id
 
   if (filtrarCliente == undefined) {
-    res.status(404).send({
-      message: "Informar um ID valido",
-    });
+    res.status(404).send({ message: "Informar um Id valido" }); //filtro caso for id errado
   }
 
-  const {
-    conta: { saldobodyRequest }, 
-  } = req.body;
-  const deposito = {
-    conta: { bodyRequest }, };
-    listaClientes.push(deposito);
+  if (filtrarCliente.conta.saldo < bodyRequest) {
+    // validando se saldo for menor que pagamento
+    res.status(400).send({ message: "Saldo insuficiente" });
+  }
 
-    return res.status(200).json([
+  if (filtrarCliente.conta.saldo >= bodyRequest) {
+    // Se saldo for >= a requisao
+
+    filtrarCliente.conta.saldo -= bodyRequest; // faz o pagamento
+
+    res.status(200).json([
       {
-        mensagem: `Deposito de realizado com sucesso`,
+        mensagem: `Pagamento de R$${bodyRequest} realizado com sucesso.`,
         filtrarCliente,
       },
     ]);
   }
-);
+});
 
-//PATCH - atualizar endereco e telefone
+//PATCH - Atualizar endereco e telefone
 app.patch("/clientes/update/:id", (req, res) => {
-  const idCliente = req.params.id;
-  let bodyRequest = req.body.endereco;
-  let bodyFone = req.body.telefone;
+  const idCliente = req.params.id; // identifica o id do cliente
+  let bodyRequest = req.body.endereco; // colhe o endereço para atualizar
+  let bodyFone = req.body.telefone; // colhe o endereço para atualizar
 
-  filtrarCliente = listaClientes.find((cliente) => cliente.id == idCliente);
+  filtrarCliente = listaClientes.find((cliente) => cliente.id == idCliente); //filtra id
 
   if (filtrarCliente == undefined) {
-    res.status(404).send({ message: "Informar um Id valido" });
+    res.status(404).send({ message: "Informar um Id valido" }); //filtro caso for id errado
   }
 
-  filtrarCliente.endereco = bodyRequest;
-  filtrarCliente.telefone = bodyFone;
+  filtrarCliente.endereco = bodyRequest; //filtra atualizando o endereço
+  filtrarCliente.telefone = bodyFone; // filtra atualizando
 
   res.status(200).json([
     {
@@ -151,19 +132,49 @@ app.patch("/clientes/update/:id", (req, res) => {
   ]);
 });
 
+//DELETE - Encerrar contas de clientes - DELETE
+app.delete("/clientes/:id", (req, res) => {
+  const idCliente = req.params.id;
+
+  const filtrarCliente = listaClientes.find((usuario) => usuario.id == idCliente);
+
+  if (filtrarCliente) {
+    listaClientes.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        return listaClientes.splice(index, 1);
+      }
+    });
+    return res.status(200).json({
+      message: `O usuário ${filtrarCliente.nome_cliente} foi deletado com sucesso`,
+    });
+  }
+  return res.status(404).json({
+    message: "Cliente não foi encontarado",
+  });
+});
+
+//GET - Filtrar os clientes do banco pelo seu nome e CPF
+//http://localhost:3333/clientes?nome=Beatrice
+//http://localhost:3333/clientes?cpf=514.196.671-22
+app.get("/clientes", (req, res) => {
+  const filtrarNome = req.query.nome?.toLowerCase();
+  const filtrarCPF = req.query.cpf;
+
+  const filtrarCliente = listaClientes.filter((usuario) => {
+    if (filtrarNome) {
+      return usuario.nome_cliente.toLowerCase().includes(filtrarNome);
+    }
+
+    if (filtrarCPF) {
+      return usuario.cpf_cliente == filtrarCPF;
+    }
+
+    return usuario;
+  });
+
+  return res.status(200).json(filtrarCliente);
+});
+
 app.listen(port, () => {
   console.log(`API está rodando na porta ${port}`);
 });
-
-//DELETE - Encerrar contas de clientes - DELETE
-
-//GET - Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... - FILTRO
-
-// Apagar depois
-//https://github.com/xeniabarreto/On14-TodasEmTech-s11-PG-II/blob/xenia-barreto/estabelecimentos/src/controllers/estabelecimentoController.js
-
-// - Criar os clientes do banco - Post - ok
-// - Atualizar informações desses clientes ( como endereço, telefone de contato...) PATCH - ok
-// - Fazer depósitos / pagamentos usando o saldo de sua conta - PATCH (usar o + e o -)
-// - Encerrar contas de clientes - DELETE
-// - Conseguir Filtrar os clientes do banco pelo seu nome,por saldo... - FILTRO
