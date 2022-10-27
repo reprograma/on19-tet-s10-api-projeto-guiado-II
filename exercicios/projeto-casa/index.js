@@ -44,64 +44,93 @@ app.post("/conta/add", (req, res) => {
   });
 
 //- Atualizar informações desses clientes ( como endereço, telefone de contato...)
-app.patch("/clientes/atualiza",(req, res)=>{
-    const cpfUsuario = req.query.cpf_cliente;
-    const novosDados = req.body;
+app.patch("/clientes/atualiza/:id",(req, res)=>{
+    const idCliente = req.params.id;
+    const {endereco} = req.body;
+    const {telefone} = req.body;
   
-    const existeCliente = contasClientes.find(user => user.cpf_cliente === cpfUsuario)
+    const existeCliente = contasClientes.find(user => user.id == idCliente)
   
     if(existeCliente) {
         const usuarioAtualizado = {
             ...existeCliente,
-            ...novosDados
-        }
+        endereco,
+        telefone,
+            }
+        
         contasClientes.map((user, index)=>{
-            if(user.cpf_cliente == cpfUsuario){
+            if(user.id == idCliente){
                 return contasClientes[index] = usuarioAtualizado
             }
         })
       return res.status(200).json(usuarioAtualizado)
     }
-    return res.status(404).json({message:"CPF não foi encontrado"})
+    return res.status(404).json({message:"ID não foi encontrado"})
   })
   
   //- Fazer depósitos / pagamentos usando o saldo de sua conta
-  app.patch('/clientes/:id/pagamento', (req,res)=>{ 
+  //Deposito
+  app.patch("/clientes/:id/deposito", (req,res)=>{
     const idCliente = req.params.id;
-    const { pagamento } = req.body;
-  
+    const { deposito } = req.body;
+
     const existeCliente = contasClientes.find(
       (cliente) => cliente.id == idCliente
     );
-  
-    if (existeCliente.conta.saldo >= pagamento) {
-      const transacaoPagamento = {
+
+    if (existeCliente) {
+      const fazDeposito = {
         ...existeCliente.conta,
-        saldo: existeCliente.conta.saldo - pagamento
+        saldo: existeCliente.conta.saldo + deposito,
       };
-  
+
       contasClientes.map((cliente, index) => {
         if (cliente.id == idCliente) {
-            contasClientes[index].conta =  transacaoPagamento
+          contasClientes[index].conta = fazDeposito ;
         }
       });
       return res.status(200).json({
-        message: `O pagammento foi realizado com sucesso.Saldo R$ ${transacaoPagamento.saldo.toFixed(2)}`,
+        message: `Depósito do cliente ${existeCliente.nome_cliente} realizado com sucesso. Saldo ${fazDeposito.saldo}`,
     })
-    }
-  return res.status(404).json({ messagem: 'Saldo insuficiente' });  
+  }  
+    return res.status(404).json({ messagem: "Cliente não encontrado"});  
   })
+//Saque
+app.patch("/clientes/:id/saque", (req,res)=>{
+  const idCliente = req.params.id;
+  const { saque } = req.body;
 
+  const existeCliente = contasClientes.find(
+    (cliente) => cliente.id == idCliente
+  );
+
+  if (existeCliente.conta.saldo >= saque) {
+    const fazSaque = {
+      ...existeCliente.conta,
+      saldo: existeCliente.conta.saldo - saque,
+    };
+
+    contasClientes.map((cliente, index) => {
+      if (cliente.id == idCliente) {
+        contasClientes[index].conta = fazSaque ;
+      }
+    });
+    return res.status(200).json({
+      message: `Saque do cliente ${existeCliente.nome_cliente} realizado com sucesso. Saldo ${fazSaque.saldo}`,
+  })
+}  
+  return res.status(403).json({ messagem: "Saldo insuficiente"});  
+})
 
 //- Encerrar contas de clientes
-app.delete("/clientes/:cpf_cliente",(req, res)=>{
-    const cpfCliente = req.params.cpf_cliente
+app.delete("/clientes/:id",(req, res)=>{
+    const idCliente = req.params.id
     
-    const existeCliente = contasClientes.find(cliente => cliente.cpf_cliente == cpfCliente)
+    const existeCliente = contasClientes.find(cliente => cliente.id == idCliente )
 
     if(existeCliente){
         contasClientes.map((cliente, index)=>{
-            if(cliente.cpf_cliente == cpfCliente){
+            if(cliente.id == idCliente ){
                 contasClientes.splice(index,1)
             }
         })
@@ -114,7 +143,7 @@ app.delete("/clientes/:cpf_cliente",(req, res)=>{
     }
 
     return res.status(404).json({ 
-        message:`Não foi possível apagar o usuário com CPF ${cpfCliente} pois não foi encontrado`
+        message:`Não foi possível apagar o usuário, pois não foi encontrado`
     })
 })
 
@@ -122,18 +151,18 @@ app.delete("/clientes/:cpf_cliente",(req, res)=>{
 //- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
 app.get("/cliente",(req, res)=>{
 const filtroNome = req.query.nome
-const filtroCPF = req.query.cpf
+const filtroSaldo = req.query.saldo
 
 const clientesFiltrados = contasClientes.filter((cliente)=>{
     if(filtroNome){
         return cliente.nome_cliente.toLowerCase() == filtroNome.toLowerCase()
     }
-    if(filtroCPF){
-        return cliente.cpf_cliente == filtroCPF
+    if(filtroSaldo){
+        return cliente.conta.saldo == filtroSaldo
     }
     return cliente
 })
-res.json(clientesFiltrados)
+return res.status(200).json(clientesFiltrados)
 })
 
 
