@@ -6,18 +6,18 @@ const novaConta = Math.floor(Math.random()* 5194728);
 const listaClientes = require('./model/contas-clientes.json');
 app.use(express.json());
 
-app.get('/clientes', (req, res) =>{
-  res.send(listaClientes)
-})
+//app.get('/clientes', (req, res) =>{
+//  res.send(listaClientes)
+//})
 
 
-// - Criar os clientes do banco
+// [x] - Criar os clientes do banco
 
 app.post('/clientes/add', (req, res) => {
     const { nome_cliente,
     cpf_cliente,
     data_nascimento,
-    conta: {tipo, saldo}
+    conta: {tipo}
 } = req.body;
   
     const IDUnico = uuidv4();
@@ -30,7 +30,6 @@ app.post('/clientes/add', (req, res) => {
       conta: {
         numero : novaConta ,
         tipo,
-        saldo,
         data_criacao: new Date,
       } 
     };
@@ -39,7 +38,7 @@ app.post('/clientes/add', (req, res) => {
     return res.json(novoCliente);
   });
 
-  // Atualizar informações desses clientes ( como endereço, telefone de contato...)
+  //[x] Atualizar informações desses clientes ( como endereço, telefone de contato...)
 
   app.patch("/clientes/:id",(req, res)=>{
     const IDCliente = req.params.id
@@ -65,8 +64,7 @@ app.post('/clientes/add', (req, res) => {
    
 })
 
-//Fazer depósitos / pagamentos usando o saldo de sua conta
-
+//Fazer depósitos 
   app.patch("/conta/:id/deposito", (req, res) => {
     const { deposito } = req.body;
     const IDCliente  = req.params.id;
@@ -83,36 +81,84 @@ app.post('/clientes/add', (req, res) => {
           return listaClientes[index] = opDeposito
     }
     })
-    return res.status(200).json(opDeposito)
+    return res.status(200).json(acharCliente)
   }
-    return res.status(404).json("Não foi possivel localizar o cliente ");
+    return res.status(404).json("O depósito não foi realizado ");
   })
 
+  // Fazer pagamento 
+
+  app.patch("/conta/id/pagamento", (req, res) => {
+   const { pagamentos } = req.body
+   const IDCliente = req.params.id
+
+   const acharCliente2 = listaClientes.find((cliente) => cliente.id == IDCliente)
+
+   if(acharCliente2.conta.saldo >= pagamentos){
+    const realizarPagamento = {
+      ...acharCliente2.conta,
+      saldo:acharCliente2.conta.saldo - pagamentos
+    }
+    listaClientes.map((cliente, index) =>{
+      if (cliente.id == IDCliente){
+        return listaClientes[index] = realizarPagamento
+      }
+    })
+    return res.status(200).json(acharCliente2)
+   }
+   return res.status(404).json("Saldo Insuficiente")
+  })
+  
   //Encerrar contas de clientes
 
   app.delete("/clientes/:id",(req,res)=>{
-    const idCliente = req.params.id
+    const IDCliente = req.params.id
   
-    const locCliente = listaClientes.find((user)=> user.id == idCliente)
+    const localizarCliente = listaClientes.find((cliente)=> cliente.id == idCliente)
   
-    if(locCliente){
+    if(localizarCliente){
         listaClientes.map((cliente,index)=>{
-            if(cliente.id == idCliente){
+            if(cliente.id == IDCliente){
                 return listaClientes.splice(index,1)
             }
   
         })
-        return res.status(200).json({
-           message:`O usuário ${locCliente.nome_cliente} foi deletado com sucesso`})
+        return res.status(200).json(`O usuário foi deletado com sucesso`)
     }
-    return res.status(404).json({
-        message:"Cliente não foi encontarado"
-    })
+    return res.status(404).json("Cliente não foi encontarado")
   })
-
   
-  app.listen(port, () => {
-    console.log(`API está rodando na porta ${port}`);
+  //- Conseguir Filtrar os clientes do banco pelo seu nome,por saldo...
+
+  app.get("/clientes", (req, res)=>{
+    //const filtroNome = req.query.nome?.toLowerCase()
+    const filtroCPF =  req.query.cpf
+    const filtroid = req.query.id
+
+
+    
+
+    const escolhaDoFiltro =  listaClientes.filter((cliente) => {
+
+      //if(filtroNome) {
+       // return cliente.nome_cliente.toLowerCase().includes(filtroNome);
+      //}
+      if (filtroCPF) {
+        return cliente.cpf_cliente == filtroCPF
+      }
+      if(filtroid){
+        return cliente.id == filtroid
+      }
+      return cliente 
+    })
+    return res.json(escolhaDoFiltro)
+
+
   });
+
+
+  app.listen(port,()=>{
+    console.log(`Api esta rodando na porta ${port}`);
+  })
 
 
