@@ -88,23 +88,23 @@ app.post('/clientes/add', (req, res) => {
 
   // Fazer pagamento 
 
-  app.patch("/conta/id/pagamento", (req, res) => {
-   const { pagamentos } = req.body
+  app.patch("/conta/:id/pagamento", (req, res) => {
+   const  pagamentos  = req.body
    const IDCliente = req.params.id
 
    const acharCliente2 = listaClientes.find((cliente) => cliente.id == IDCliente)
-
-   if(acharCliente2.conta.saldo >= pagamentos){
+   const valorBoleto = -250
+   if(acharCliente2){
     const realizarPagamento = {
       ...acharCliente2.conta,
-      saldo:acharCliente2.conta.saldo - pagamentos
+      saldo:acharCliente2.conta.saldo - valorBoleto
     }
     listaClientes.map((cliente, index) =>{
       if (cliente.id == IDCliente){
-        return listaClientes[index] = realizarPagamento
+        return listaClientes[index].conta = realizarPagamento
       }
     })
-    return res.status(200).json(acharCliente2)
+    return res.status(200).json(acharCliente2.conta.saldo)
    }
    return res.status(404).json("Saldo Insuficiente")
   })
@@ -114,7 +114,7 @@ app.post('/clientes/add', (req, res) => {
   app.delete("/clientes/:id",(req,res)=>{
     const IDCliente = req.params.id
   
-    const localizarCliente = listaClientes.find((cliente)=> cliente.id == idCliente)
+    const localizarCliente = listaClientes.find((cliente)=> cliente.id == IDCliente)
   
     if(localizarCliente){
         listaClientes.map((cliente,index)=>{
