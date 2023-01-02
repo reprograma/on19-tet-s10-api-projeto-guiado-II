@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "name": "exercicio-para-casa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon.js"
+  },
+  "author": "Karoline Amaral",
+  "license": "ISC",
+  "description": ""
+}
